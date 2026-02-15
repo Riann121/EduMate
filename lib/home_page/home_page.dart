@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   Drawer _drawerWidget() {
     return Drawer(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [

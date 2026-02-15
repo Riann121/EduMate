@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTheme {
@@ -8,6 +9,7 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.light,
       scaffoldBackgroundColor: AppColors.surface,
+      textTheme: _textTheme(),
       colorScheme: _colorScheme(),
       appBarTheme: _appBarTheme(),
       elevatedButtonTheme: _elevatedButtonTheme(),
@@ -17,6 +19,13 @@ class AppTheme {
   }
 
   //helper methods to build theme components
+  TextTheme _textTheme() {
+    return GoogleFonts.montserratTextTheme().apply(
+      bodyColor: AppColors.onSurface,
+      displayColor: AppColors.onSurface,
+    );
+  }
+
   ColorScheme _colorScheme() {
     return ColorScheme.fromSeed(
       seedColor: AppColors.primary,

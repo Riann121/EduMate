@@ -42,9 +42,9 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.zero,
         children: [
           _drawerHeader(),
-          _coursesTile(),
-          _routineTile(),
           _tasksTile(),
+          _routineTile(),
+          _coursesTile(),
         ],
       ),
     );

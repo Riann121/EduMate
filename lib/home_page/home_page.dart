@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:edumate/home_page/widgets/home_stats_grid.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -121,8 +122,25 @@ class _HomePageState extends State<HomePage> {
 
   // ---------- Body Widget ----------
   Widget _bodyWidget() {
-    return const Center(
-      child: Text('Welcome to the Home Page!'),
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 18, 24, 12),
+      child: ListView(
+        children: const [
+          SizedBox(height: 8),
+          Padding(
+            padding: EdgeInsets.only(left: 6),
+            child: Text(
+              'Welcome Back',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
+          SizedBox(height: 12),
+          HomeStatsGrid(),
+        ],
+      ),
     );
   }
 }

@@ -76,7 +76,7 @@ class AppTheme {
   CardThemeData _cardTheme() {
     return const CardThemeData(
       color: AppColors.surfaceContainerHighest,
-      elevation: 10,
+      elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),

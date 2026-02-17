@@ -9,6 +9,8 @@ class HomeStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -18,15 +20,15 @@ class HomeStatCard extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: AppColors.onSurfaceVariant,
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               value,
-              style: const TextStyle(
-                color: AppColors.onPrimary,
+              style: TextStyle(
+                color: colorScheme.onSurface,
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
               ),

@@ -11,15 +11,18 @@ class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Tasks',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
+      appBar: _taskPageAppBar(),
+    );
+  }
+
+
+  AppBar _taskPageAppBar() {
+    return AppBar(
+      title: const Text(
+        'Tasks',
+        style: TextStyle(fontWeight: FontWeight.bold),
       ),
+      centerTitle: true,
     );
   }
 }

@@ -75,10 +75,14 @@ class AppTheme {
 
   CardThemeData _cardTheme() {
     return const CardThemeData(
-      color: AppColors.primary,
-      elevation: 2,
+      color: AppColors.surfaceContainerHighest,
+      surfaceTintColor: Colors.transparent,
+      shadowColor: Colors.black26,
+      elevation: 1,
+      margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12)),
+        side: BorderSide(color: Color(0xFFD0D0D0), width: 1.2),
       ),
     );
   }

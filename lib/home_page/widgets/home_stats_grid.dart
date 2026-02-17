@@ -14,15 +14,15 @@ class HomeStatsGrid extends StatelessWidget {
             children: const [
               Expanded(
                 child: HomeStatCard(
-                  title: 'Total Classes',
-                  value: '6',
+                  title: 'Due Tasks',
+                  value: '5',
                 ),
               ),
               SizedBox(width: 12),
               Expanded(
                 child: HomeStatCard(
-                  title: 'Due This Week',
-                  value: '4',
+                  title: 'Upcoming Exams',
+                  value: '2',
                 ),
               ),
             ],
@@ -32,14 +32,14 @@ class HomeStatsGrid extends StatelessWidget {
             children: const [
               Expanded(
                 child: HomeStatCard(
-                  title: 'Total Classes',
+                  title: 'Due Assignments',
                   value: '6',
                 ),
               ),
               SizedBox(width: 12),
               Expanded(
                 child: HomeStatCard(
-                  title: 'Due This Week',
+                  title: 'Due Lab Reports',
                   value: '4',
                 ),
               ),

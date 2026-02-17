@@ -18,22 +18,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-
   // ---------- AppBar Widget ----------
   AppBar _homePageAppBar() {
     return AppBar(
       title: const Text(
         'Edumate',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(fontWeight: FontWeight.bold),
       ),
       centerTitle: true,
     );
   }
-
-
 
   // ---------- Drawer Widget ----------
   Drawer _drawerWidget() {
@@ -50,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  
+
   // Drawer Header with logo and error handling for image loading
   DrawerHeader _drawerHeader() {
     return DrawerHeader(
@@ -96,7 +90,7 @@ class _HomePageState extends State<HomePage> {
       routeName: '/tasks',
     );
   }
-  
+
   //method to create drawer navigation tiles
   ListTile _drawerNavigationTile({
     required String title,
@@ -105,12 +99,7 @@ class _HomePageState extends State<HomePage> {
   }) {
     return ListTile(
       leading: Icon(icon),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontWeight: FontWeight.w500,
-        ),
-      ),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
       onTap: () {
         Navigator.pop(context);
         Navigator.pushNamed(context, routeName);
@@ -118,28 +107,28 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-
   // ---------- Body Widget ----------
   Widget _bodyWidget() {
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 18, 24, 12),
       child: ListView(
-        children: const [
+        children: [
           SizedBox(height: 8),
-          Padding(
-            padding: EdgeInsets.only(left: 6),
-            child: Text(
-              'Welcome Back',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ),
+          _bodyTitle(),
           SizedBox(height: 12),
           HomeStatsGrid(),
         ],
+      ),
+    );
+  }
+
+  // body title
+  Widget _bodyTitle() {
+    return Padding(
+      padding: EdgeInsets.only(left: 6),
+      child: Text(
+        'Welcome Back',
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
       ),
     );
   }

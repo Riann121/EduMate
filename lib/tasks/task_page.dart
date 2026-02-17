@@ -1,3 +1,4 @@
+import 'package:edumate/tasks/widgets/add_task_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:edumate/tasks/widgets/task_item.dart';
 import 'package:edumate/tasks/widgets/task_tile.dart';
@@ -17,11 +18,7 @@ class _TaskPageState extends State<TaskPage> {
     return Scaffold(
       appBar: _taskPageAppBar(),
       body: _taskListBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Colors.black,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      floatingActionButton: _addTaskButton(),
     );
   }
 
@@ -65,5 +62,25 @@ class _TaskPageState extends State<TaskPage> {
         );
       },
     );
+  }
+
+  Widget _addTaskButton() {
+    return FloatingActionButton(
+      onPressed: _onAddTaskPressed,
+      backgroundColor: Colors.black,
+      child: const Icon(Icons.add, color: Colors.white),
+    );
+  }
+
+  Future<void> _onAddTaskPressed() async {
+    final newTask = await showAddTaskDialog(context);
+
+    if (newTask == null || !mounted) {
+      return;
+    }
+
+    setState(() {
+      _tasks.add(newTask);
+    });
   }
 }

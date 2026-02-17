@@ -27,61 +27,74 @@ class TaskTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Checkbox(
-            value: isCompleted,
-            onChanged: onChanged,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            side: const BorderSide(color: AppColors.onSurfaceVariant),
-          ),
+          _completedCheckBox(),
           const SizedBox(width: 6),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: AppColors.onSurface,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    decoration: isCompleted ? TextDecoration.lineThrough : null,
-                  ),
-                ),
-                if (detail != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    detail!,
-                    style: const TextStyle(
-                      color: AppColors.onSurfaceVariant,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ],
+          _taskDetails(),
+          const SizedBox(width: 10),
+          _dueDateWidget(),
+        ],
+      ),
+    );
+  }
+  
+
+  //checkbox
+  Checkbox _completedCheckBox() {
+    return Checkbox(
+      value: isCompleted,
+      onChanged: onChanged,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      side: const BorderSide(color: AppColors.onSurfaceVariant),
+    );
+  }
+
+  //task details
+  Widget _taskDetails() {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: AppColors.onSurface,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              decoration: isCompleted ? TextDecoration.lineThrough : null,
             ),
           ),
-          const SizedBox(width: 10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(color: const Color(0xFFD3D3D3), width: 1),
-            ),
-            child: Text(
-              _dueDateLabel(dueDate),
+          if (detail != null) ...[
+            const SizedBox(height: 2),
+            Text(
+              detail!,
               style: const TextStyle(
-                color: AppColors.onSurface,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
+                color: AppColors.onSurfaceVariant,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
               ),
             ),
-          ),
+          ],
         ],
+      ),
+    );
+  }
+
+  Widget _dueDateWidget() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: const Color(0xFFD3D3D3), width: 1),
+      ),
+      child: Text(
+        _dueDateLabel(dueDate),
+        style: const TextStyle(
+          color: AppColors.onSurface,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }

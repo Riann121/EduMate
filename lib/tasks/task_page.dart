@@ -29,6 +29,7 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 
+  //task list 
   Widget _taskListBody() {
     if (_tasks.isEmpty) {
       return const Center(
@@ -52,7 +53,7 @@ class _TaskPageState extends State<TaskPage> {
             dueDate: task.dueDate,
             isCompleted: false,
             onChanged: (value) {
-              if (value ?? false) {
+              if (value == true) {
                 setState(() {
                   _tasks.remove(task);
                 });
@@ -64,6 +65,7 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 
+  //add button functionalities
   Widget _addTaskButton() {
     return FloatingActionButton(
       onPressed: _onAddTaskPressed,

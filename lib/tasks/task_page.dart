@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:edumate/tasks/widgets/task_item.dart';
 import 'package:edumate/tasks/widgets/task_tile.dart';
 
 class TaskPage extends StatefulWidget {
@@ -9,7 +10,7 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  bool _sampleTaskCompleted = false;
+  final List<TaskItem> _tasks = buildDummyTaskItems();
 
   @override
   Widget build(BuildContext context) {
@@ -24,21 +25,37 @@ class _TaskPageState extends State<TaskPage> {
   }
 
   Widget _taskListBody() {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-      children: [
-        TaskTile(
-          title: 'Complete DBMS assignment',
-          detail: 'CS-302',
-          dueDate: DateTime.now().add(const Duration(days: 1)),
-          isCompleted: _sampleTaskCompleted,
-          onChanged: (value) {
-            setState(() {
-              _sampleTaskCompleted = value ?? false;
-            });
-          },
+    if (_tasks.isEmpty) {
+      return const Center(
+        child: Text(
+          'No tasks left',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
-      ],
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      itemCount: _tasks.length,
+      itemBuilder: (context, index) {
+        final task = _tasks[index];
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: TaskTile(
+            title: task.title,
+            detail: task.detail,
+            dueDate: task.dueDate,
+            isCompleted: false,
+            onChanged: (value) {
+              if (value ?? false) {
+                setState(() {
+                  _tasks.remove(task);
+                });
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }

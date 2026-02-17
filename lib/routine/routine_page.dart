@@ -15,7 +15,7 @@ class _RoutinePageState extends State<RoutinePage> {
         title: const Text(
           'Routine',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w900,
           ),
         ),
         centerTitle: true,

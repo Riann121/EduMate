@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     return AppBar(
       title: const Text(
         'Edumate',
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: TextStyle(fontWeight: FontWeight.w900),
       ),
       centerTitle: true,
     );
@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
   // body title
   Widget _bodyTitle() {
     return Padding(
-      padding: EdgeInsets.only(left: 15),
+      padding: EdgeInsets.only(left: 12),
       child: Text(
         'Welcome Back',
         style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900),

@@ -15,7 +15,7 @@ class _CoursesPageState extends State<CoursesPage> {
         title: const Text(
           'Courses',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w900,
           ),
         ),
         centerTitle: true,

@@ -14,7 +14,15 @@ class _TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: _taskPageAppBar(), body: _taskListBody());
+    return Scaffold(
+      appBar: _taskPageAppBar(),
+      body: _taskListBody(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.black,
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+    );
   }
 
   AppBar _taskPageAppBar() {

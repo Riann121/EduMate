@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:edumate/home_page/widgets/home_stats_grid.dart';
+import 'package:edumate/tasks/widgets/task_item.dart';
+import 'package:edumate/tasks/widgets/task_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,6 +11,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late final List<TaskItem> _todayTasks;
+
+  @override
+  void initState() {
+    super.initState();
+    _todayTasks = buildDummyTaskItems()
+        .where((task) => DateUtils.isSameDay(task.dueDate, DateTime.now()))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,10 +125,12 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.fromLTRB(24, 18, 24, 12),
       child: ListView(
         children: [
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _bodyTitle(),
-          SizedBox(height: 16),
-          HomeStatsGrid(),
+          const SizedBox(height: 16),
+          const HomeStatsGrid(),
+          const SizedBox(height: 50),
+          _todayTasksSection(),
         ],
       ),
     );
@@ -125,10 +139,62 @@ class _HomePageState extends State<HomePage> {
   // body title
   Widget _bodyTitle() {
     return Padding(
-      padding: EdgeInsets.only(left: 12),
-      child: Text(
+      padding: const EdgeInsets.only(left: 12),
+      child: const Text(
         'Welcome Back',
         style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900),
+      ),
+    );
+  }
+
+  Widget _todayTasksSection() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 18, 14, 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Today's Tasks",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 18),
+          if (_todayTasks.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                'No tasks assigned for today',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+            )
+          else
+            ..._todayTasks.map(
+              (task) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: TaskTile(
+                  title: task.title,
+                  detail: task.detail,
+                  dueDate: task.dueDate,
+                  isCompleted: false,
+                  onChanged: (value) {
+                    if (value == true) {
+                      setState(() {
+                        _todayTasks.remove(task);
+                      });
+                    }
+                  },
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

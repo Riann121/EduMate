@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    //fetching today's tasks 
     _todayTasks = buildDummyTaskItems()
         .where((task) => DateUtils.isSameDay(task.dueDate, DateTime.now()))
         .toList();
@@ -34,12 +35,13 @@ class _HomePageState extends State<HomePage> {
   AppBar _homePageAppBar() {
     return AppBar(
       title: const Text(
-        'Edumate',
+        'EduMate',
         style: TextStyle(fontWeight: FontWeight.w900),
       ),
       centerTitle: true,
     );
   }
+  
 
   // ---------- Drawer Widget ----------
   Drawer _drawerWidget() {
@@ -119,6 +121,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+
   // ---------- Body Widget ----------
   Widget _bodyWidget() {
     return Container(
@@ -147,55 +150,79 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Today's tasks section with title and list of tasks or empty state
   Widget _todayTasksSection() {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 18, 14, 12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
-      ),
+      decoration: _todayTasksSectionDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Today's Tasks",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
+          _todayTasksTitle(),
           const SizedBox(height: 18),
-          if (_todayTasks.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
-              child: Text(
-                'No tasks assigned for today',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-              ),
-            )
-          else
-            ..._todayTasks.map(
-              (task) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: TaskTile(
-                  title: task.title,
-                  detail: task.detail,
-                  dueDate: task.dueDate,
-                  isCompleted: false,
-                  onChanged: (value) {
-                    if (value == true) {
-                      setState(() {
-                        _todayTasks.remove(task);
-                      });
-                    }
-                  },
-                ),
-              ),
-            ),
+          ..._todayTasksContent(), //spreads the list of widgets into the children of the column
         ],
       ),
     );
+  }
+
+  BoxDecoration _todayTasksSectionDecoration() {
+    return BoxDecoration(
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      borderRadius: BorderRadius.circular(14),
+      border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+    );
+  }
+
+  Widget _todayTasksTitle() {
+    return Text(
+      "Today's Tasks",
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.onSurface,
+        fontSize: 22,
+        fontWeight: FontWeight.w800,
+      ),
+    );
+  }
+
+  List<Widget> _todayTasksContent() {
+    if (_todayTasks.isEmpty) {
+      return [_todayTasksEmptyState()];
+    }
+
+    return _todayTasks
+        .map((task) => _todayTaskTile(task))
+        .toList(growable: false);
+  }
+
+  Widget _todayTasksEmptyState() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 12),
+      child: Text(
+        'No tasks assigned for today',
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      ),
+    );
+  }
+
+  Widget _todayTaskTile(TaskItem task) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: TaskTile(
+        title: task.title,
+        detail: task.detail,
+        dueDate: task.dueDate,
+        isCompleted: false,
+        onChanged: (value) => _onTodayTaskChecked(value, task),
+      ),
+    );
+  }
+
+  void _onTodayTaskChecked(bool? value, TaskItem task) {
+    if (value == true) {
+      setState(() {
+        _todayTasks.remove(task);
+      });
+    }
   }
 }

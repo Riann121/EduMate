@@ -113,9 +113,9 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.fromLTRB(24, 18, 24, 12),
       child: ListView(
         children: [
-          SizedBox(height: 12),
+          SizedBox(height: 16),
           _bodyTitle(),
-          SizedBox(height: 12),
+          SizedBox(height: 16),
           HomeStatsGrid(),
         ],
       ),
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
       padding: EdgeInsets.only(left: 12),
       child: Text(
         'Welcome Back',
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
+        style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900),
       ),
     );
   }

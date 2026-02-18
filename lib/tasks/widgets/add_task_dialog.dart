@@ -23,6 +23,7 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
 
   @override
   void dispose() {
+    //wipes the info when the dialog box disappears
     _titleController.dispose();
     _detailController.dispose();
     super.dispose();
@@ -34,60 +35,9 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
       backgroundColor: const Color(0xFFEFEFEF),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: const Text('Add Task'),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText: 'Task title',
-                filled: true,
-                fillColor: Colors.white,
-                errorText: _titleError,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _detailController,
-              decoration: InputDecoration(
-                labelText: 'Details',
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            InkWell(
-              onTap: _pickDate,
-              borderRadius: BorderRadius.circular(12),
-              child: Ink(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.calendar_today, size: 18),
-                    const SizedBox(width: 10),
-                    Text(_formatDate(_selectedDate)),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      content: _buildDialogContent(),
       actions: [
+        //cancel btn
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Cancel'),
@@ -101,6 +51,75 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
           child: const Text('Save'),
         ),
       ],
+    );
+  }
+
+  Widget _buildDialogContent() {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildTitleTextField(),
+          const SizedBox(height: 12),
+          _buildDetailTextField(),
+          const SizedBox(height: 12),
+          _buildDatePickerField(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTitleTextField() {
+    return TextField(
+      controller: _titleController,
+      decoration: _buildTextFieldDecoration(
+        labelText: 'Task title',
+        errorText: _titleError,
+      ),
+    );
+  }
+
+  Widget _buildDetailTextField() {
+    return TextField(
+      controller: _detailController,
+      decoration: _buildTextFieldDecoration(labelText: 'Details'),
+    );
+  }
+
+  Widget _buildDatePickerField() {
+    return InkWell(
+      onTap: _pickDate,
+      borderRadius: BorderRadius.circular(12),
+      child: Ink(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.calendar_today, size: 18),
+            const SizedBox(width: 10),
+            Text(_formatDate(_selectedDate)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  InputDecoration _buildTextFieldDecoration({
+    required String labelText,
+    String? errorText,
+  }) {
+    return InputDecoration(
+      labelText: labelText,
+      filled: true,
+      fillColor: Colors.white,
+      errorText: errorText,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
     );
   }
 

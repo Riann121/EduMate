@@ -34,20 +34,20 @@ List<UpcomingExamItem> buildDummyUpcomingExamItems() {
   final items = [
     UpcomingExamItem(
       examTitle: 'Quiz',
-      courseName: 'Advanced Mathematics',
-      syllabus: 'Limits, continuity, and differentiability',
+      courseName: 'Laplace Transforms',
+      syllabus: 'Differential equations, Laplace transform properties, and inverse transforms',
       examDate: today.add(const Duration(days: 1)),
     ),
     UpcomingExamItem(
       examTitle: 'Mid Term',
-      courseName: 'Computer Science',
+      courseName: 'Data Structures',
       syllabus: 'Data structures, recursion, and algorithm analysis',
       examDate: today.add(const Duration(days: 3)),
     ),
     UpcomingExamItem(
       examTitle: 'Viva',
-      courseName: 'Physics',
-      syllabus: 'Work, energy, momentum, and collisions',
+      courseName: 'Digital Logic Design',
+      syllabus: 'Boolean algebra, logic gates, and combinational circuits',
       examDate: today.add(const Duration(days: 4)),
     ),
   ];

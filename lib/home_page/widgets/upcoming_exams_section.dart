@@ -41,6 +41,7 @@ class _UpcomingExamsSectionState extends State<UpcomingExamsSection> {
     );
   }
 
+  //ttle for the section
   Widget _sectionTitle(BuildContext context) {
     return Text(
       "Upcoming Exams This Week",
@@ -52,17 +53,11 @@ class _UpcomingExamsSectionState extends State<UpcomingExamsSection> {
     );
   }
 
+
+  //section content - list of upcoming exams or empty state
   List<Widget> _sectionContent() {
     if (_upcomingExams.isEmpty) {
-      return const [
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 12),
-          child: Text(
-            'No upcoming exams this week',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-          ),
-        ),
-      ];
+      return [_emptyState()];
     }
 
     return _upcomingExams
@@ -74,6 +69,7 @@ class _UpcomingExamsSectionState extends State<UpcomingExamsSection> {
         .toList(growable: false);
   }
 
+  //exam tile for each upcoming exam item in the list
   Widget _examTile({required int index, required UpcomingExamItem item}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -83,46 +79,76 @@ class _UpcomingExamsSectionState extends State<UpcomingExamsSection> {
         child: InkWell(
           borderRadius: BorderRadius.circular(14),
           onTap: () => _showExamDetailsDialog(index),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.examTitle,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        item.courseName,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(
-                  Icons.chevron_right_rounded,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ],
-            ),
-          ),
+          child: _examTileChildren(item),
         ),
       ),
     );
   }
 
+  Widget _examTileChildren(UpcomingExamItem item) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+      child: Row(
+        children: [
+          Expanded(child: _examTileDetails(item)),
+          _examTileTrailingIcon(),
+        ],
+      ),
+    );
+  }
+
+  Widget _emptyState() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 12),
+      child: Text(
+        'No upcoming exams this week',
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      ),
+    );
+  }
+
+  Widget _examTileDetails(UpcomingExamItem item) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _examTitleText(item.examTitle),
+        const SizedBox(height: 3),
+        _examCourseText(item.courseName),
+      ],
+    );
+  }
+
+  Widget _examTitleText(String value) {
+    return Text(
+      value,
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.onSurface,
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+  }
+
+  Widget _examCourseText(String value) {
+    return Text(
+      value,
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+
+  Widget _examTileTrailingIcon() {
+    return Icon(
+      Icons.chevron_right_rounded,
+      color: Theme.of(context).colorScheme.onSurfaceVariant,
+    );
+  }
+
+
+  //dialog that shows more details about the exam when an exam tile is tapped
   Future<void> _showExamDetailsDialog(int index) async {
     final item = _upcomingExams[index];
     await showDialog<void>(

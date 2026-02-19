@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:edumate/home_page/widgets/home_stats_grid.dart';
+import 'package:edumate/home_page/widgets/upcoming_exams_section.dart';
 import 'package:edumate/home_page/widgets/weekly_submissions_section.dart';
 import 'package:edumate/tasks/widgets/task_item.dart';
 import 'package:edumate/tasks/widgets/task_tile.dart';
@@ -133,6 +134,8 @@ class _HomePageState extends State<HomePage> {
           const HomeStatsGrid(),
           const SizedBox(height: 50),
           _todayTasksSection(),
+          const SizedBox(height: 25),
+          const UpcomingExamsSection(),
           const SizedBox(height: 25),
           const WeeklySubmissionsSection(),
         ],

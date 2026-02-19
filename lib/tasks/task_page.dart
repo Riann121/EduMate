@@ -1,4 +1,5 @@
 import 'package:edumate/tasks/widgets/add_task_dialog.dart';
+import 'package:edumate/tasks/widgets/edit_task_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:edumate/tasks/widgets/task_item.dart';
 import 'package:edumate/tasks/widgets/task_tile.dart';
@@ -29,7 +30,7 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 
-  //task list 
+  //task list
   Widget _taskListBody() {
     if (_tasks.isEmpty) {
       return const Center(
@@ -52,10 +53,11 @@ class _TaskPageState extends State<TaskPage> {
             detail: task.detail,
             dueDate: task.dueDate,
             isCompleted: false,
+            onTap: () => _onTaskTileTapped(index),
             onChanged: (value) {
               if (value == true) {
                 setState(() {
-                  _tasks.remove(task);
+                  _tasks.removeAt(index);
                 });
               }
             },
@@ -83,6 +85,21 @@ class _TaskPageState extends State<TaskPage> {
 
     setState(() {
       _tasks.add(newTask);
+    });
+  }
+
+  Future<void> _onTaskTileTapped(int index) async {
+    final updatedTask = await showEditTaskDialog(
+      context,
+      initialTask: _tasks[index],
+    );
+
+    if (updatedTask == null || !mounted) {
+      return;
+    }
+
+    setState(() {
+      _tasks[index] = updatedTask;
     });
   }
 }

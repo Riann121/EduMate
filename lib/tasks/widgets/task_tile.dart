@@ -7,6 +7,7 @@ class TaskTile extends StatelessWidget {
   final DateTime dueDate;
   final bool isCompleted;
   final ValueChanged<bool?> onChanged;
+  final VoidCallback? onTap;
 
   const TaskTile({
     super.key,
@@ -15,28 +16,32 @@ class TaskTile extends StatelessWidget {
     required this.dueDate,
     required this.isCompleted,
     required this.onChanged,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFEFEFEF),
+    return Material(
+      color: const Color(0xFFEFEFEF),
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          _completedCheckBox(),
-          const SizedBox(width: 6),
-          _taskDetails(),
-          const SizedBox(width: 10),
-          _dueDateWidget(),
-        ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          child: Row(
+            children: [
+              _completedCheckBox(),
+              const SizedBox(width: 6),
+              _taskDetails(),
+              const SizedBox(width: 10),
+              _dueDateWidget(),
+            ],
+          ),
+        ),
       ),
     );
   }
-  
 
   //checkbox
   Checkbox _completedCheckBox() {

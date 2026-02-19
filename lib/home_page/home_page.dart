@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:edumate/home_page/widgets/home_stats_grid.dart';
 import 'package:edumate/home_page/widgets/upcoming_exams_section.dart';
 import 'package:edumate/home_page/widgets/weekly_submissions_section.dart';
+import 'package:edumate/tasks/widgets/edit_task_dialog.dart';
 import 'package:edumate/tasks/widgets/task_item.dart';
 import 'package:edumate/tasks/widgets/task_tile.dart';
 
@@ -195,7 +196,11 @@ class _HomePageState extends State<HomePage> {
     }
 
     return _todayTasks
-        .map((task) => _todayTaskTile(task))
+        .asMap()
+        .entries
+        .map((entry) {
+          return _todayTaskTile(index: entry.key, task: entry.value);
+        })
         .toList(growable: false);
   }
 
@@ -209,7 +214,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _todayTaskTile(TaskItem task) {
+  Widget _todayTaskTile({required int index, required TaskItem task}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: TaskTile(
@@ -217,16 +222,36 @@ class _HomePageState extends State<HomePage> {
         detail: task.detail,
         dueDate: task.dueDate,
         isCompleted: false,
-        onChanged: (value) => _onTodayTaskChecked(value, task),
+        onTap: () => _onTodayTaskTileTapped(index),
+        onChanged: (value) => _onTodayTaskChecked(value, index),
       ),
     );
   }
 
-  void _onTodayTaskChecked(bool? value, TaskItem task) {
+  void _onTodayTaskChecked(bool? value, int index) {
     if (value == true) {
       setState(() {
-        _todayTasks.remove(task);
+        _todayTasks.removeAt(index);
       });
     }
+  }
+
+  Future<void> _onTodayTaskTileTapped(int index) async {
+    final updatedTask = await showEditTaskDialog(
+      context,
+      initialTask: _todayTasks[index],
+    );
+
+    if (updatedTask == null || !mounted) {
+      return;
+    }
+
+    setState(() {
+      if (DateUtils.isSameDay(updatedTask.dueDate, DateTime.now())) {
+        _todayTasks[index] = updatedTask;
+      } else {
+        _todayTasks.removeAt(index);
+      }
+    });
   }
 }

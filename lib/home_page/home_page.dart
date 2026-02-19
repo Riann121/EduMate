@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:edumate/home_page/widgets/home_stats_grid.dart';
+import 'package:edumate/home_page/widgets/weekly_submissions_section.dart';
 import 'package:edumate/tasks/widgets/task_item.dart';
 import 'package:edumate/tasks/widgets/task_tile.dart';
 
@@ -16,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    //fetching today's tasks 
+    //fetching today's tasks
     _todayTasks = buildDummyTaskItems()
         .where((task) => DateUtils.isSameDay(task.dueDate, DateTime.now()))
         .toList();
@@ -41,7 +42,6 @@ class _HomePageState extends State<HomePage> {
       centerTitle: true,
     );
   }
-  
 
   // ---------- Drawer Widget ----------
   Drawer _drawerWidget() {
@@ -121,7 +121,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
   // ---------- Body Widget ----------
   Widget _bodyWidget() {
     return Container(
@@ -134,6 +133,8 @@ class _HomePageState extends State<HomePage> {
           const HomeStatsGrid(),
           const SizedBox(height: 50),
           _todayTasksSection(),
+          const SizedBox(height: 25),
+          const WeeklySubmissionsSection(),
         ],
       ),
     );
@@ -154,7 +155,7 @@ class _HomePageState extends State<HomePage> {
   Widget _todayTasksSection() {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 18, 14, 12),
-      decoration: _todayTasksSectionDecoration(),
+      decoration: _sectionBoxDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -166,7 +167,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  BoxDecoration _todayTasksSectionDecoration() {
+  BoxDecoration _sectionBoxDecoration() {
     return BoxDecoration(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
       borderRadius: BorderRadius.circular(14),

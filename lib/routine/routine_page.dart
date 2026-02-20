@@ -16,9 +16,36 @@ class _RoutinePageState extends State<RoutinePage> {
   static const Color routineGrey = Color(0xFFF3F4F6);  // Light background for inputs
   static const Color routineAccent = Color(0xFF3B82F6); // Blue from the Figma tags
 
+  final TextEditingController _startTimeCtrl = TextEditingController(text: "08:00");
+  final TextEditingController _durationCtrl = TextEditingController(text: "60");
+  final TextEditingController _numClassesCtrl = TextEditingController(text: "5");
+  final TextEditingController _numDaysCtrl = TextEditingController(text: "6");
+
+  Map<String, String> routineData = {};
+
   final List<String> weekDays = [
     "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
   ];
+
+  String calculateTime(int slotIndex) {
+    try {
+      List<String> parts = _startTimeCtrl.text.split(':');
+      int startHour = int.parse(parts[0]);
+      int startMin = parts.length > 1 ? int.parse(parts[1]) : 0;
+
+      int duration = int.parse(_durationCtrl.text);
+
+      int totalMins = (startHour * 60) + startMin + (duration * slotIndex);
+      int finalHour = (totalMins ~/ 60) % 24;
+      int finalMin = totalMins % 60;
+
+      String period = finalHour >= 12 ? "PM" : "AM";
+      int displayHour = finalHour % 12 == 0 ? 12 : finalHour % 12;
+      return "$displayHour:${finalMin.toString().padLeft(2, '0')} $period";
+    } catch (e) {
+      return "Slot ${slotIndex + 1}";
+    }
+  }
 
   //-------------BUILD---------------------------
   @override
@@ -43,6 +70,34 @@ class _RoutinePageState extends State<RoutinePage> {
             },
           ) : null,
         ),
+      body:_buildSetupView()
+    );
+  }
+
+  // Setup screen (input form)
+  Widget _buildSetupView() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 40),
+          const Text("Welcome back to", style: TextStyle(fontSize: 16, color: Colors.grey)),
+          const Text("EduMate", style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold, color: routineBlack)),
+          const SizedBox(height: 40),
+          _inputLabel("Start Time"),
+          _inputField(_startTimeCtrl, "e.g. 08:00", Icons.access_time),
+          _inputLabel("Duration (Minutes)"),
+          _inputField(_durationCtrl, "e.g. 60", Icons.timer_outlined, isNum: true),
+          _inputLabel("Total Classes"),
+          _inputField(_numClassesCtrl, "e.g. 5", Icons.grid_view, isNum: true),
+          _inputLabel("Total Days"),
+          _inputField(_numDaysCtrl, "e.g. 6", Icons.calendar_month, isNum: true),
+          const SizedBox(height: 30),
+          _actionButton("Create Routine", () => setState(() => isMade = 1), routineBlack, routineWhite),
+          const SizedBox(height: 20),
+        ],
+      ),
     );
   }
 
@@ -71,4 +126,24 @@ class _RoutinePageState extends State<RoutinePage> {
       ),
     );
   }
+  // Custom styled button used across all steps
+  Widget _actionButton(String label, VoidCallback action, Color bg, Color txt, [Color borderColor = Colors.white]) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: bg,
+          foregroundColor: txt,
+          minimumSize: const Size(double.infinity, 55),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          side: BorderSide(color: borderColor, width: 1),
+          elevation: 0,
+        ),
+        onPressed: action,
+        child: Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+      ),
+    );
+  }
+
 }
+

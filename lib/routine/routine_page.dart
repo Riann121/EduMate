@@ -20,6 +20,7 @@ class _RoutinePageState extends State<RoutinePage> {
     "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
   ];
 
+  //-------------BUILD---------------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +43,32 @@ class _RoutinePageState extends State<RoutinePage> {
             },
           ) : null,
         ),
+    );
+  }
+
+  // Label text used above input fields
+  Widget _inputLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8, top: 15),
+      child: Text(label, style: const TextStyle(
+          fontWeight: FontWeight.bold, fontSize: 14, color: Colors.grey)),
+    );
+  }
+
+  // Custom input field used for all form inputs
+  Widget _inputField(TextEditingController ctrl, String hint, IconData icon, {bool isNum = false}) {
+    return Container(
+      decoration: BoxDecoration(color: routineGrey, borderRadius: BorderRadius.circular(12)),
+      child: TextField(
+        controller: ctrl,
+        keyboardType: isNum ? TextInputType.number : TextInputType.text,
+        decoration: InputDecoration(
+          hintText: hint,
+          prefixIcon: Icon(icon, color: Colors.grey, size: 20),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.all(15),
+        ),
+      ),
     );
   }
 }

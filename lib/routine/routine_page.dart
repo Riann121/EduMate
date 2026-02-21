@@ -70,7 +70,7 @@ class _RoutinePageState extends State<RoutinePage> {
             },
           ) : null,
         ),
-      body:_buildSetupView()
+      body:_buildGridEditor()
     );
   }
 
@@ -82,7 +82,7 @@ class _RoutinePageState extends State<RoutinePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 40),
-          const Text("Welcome back to", style: TextStyle(fontSize: 16, color: Colors.grey)),
+          // const Text("Welcome back to", style: TextStyle(fontSize: 16, color: Colors.grey)),
           const Text("EduMate", style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold, color: routineBlack)),
           const SizedBox(height: 40),
           _inputLabel("Start Time"),
@@ -93,14 +93,13 @@ class _RoutinePageState extends State<RoutinePage> {
           _inputField(_numClassesCtrl, "e.g. 5", Icons.grid_view, isNum: true),
           _inputLabel("Total Days"),
           _inputField(_numDaysCtrl, "e.g. 6", Icons.calendar_month, isNum: true),
-          const SizedBox(height: 30),
+          const SizedBox(height: 30, ),
           _actionButton("Create Routine", () => setState(() => isMade = 1), routineBlack, routineWhite),
           const SizedBox(height: 20),
         ],
       ),
     );
   }
-
 
 
   // Routine editor grid

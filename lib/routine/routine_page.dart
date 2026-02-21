@@ -101,6 +101,69 @@ class _RoutinePageState extends State<RoutinePage> {
     );
   }
 
+
+
+  // Routine editor grid
+  Widget _buildGridEditor() {
+    int classes = int.tryParse(_numClassesCtrl.text) ?? 1;
+    int days = int.tryParse(_numDaysCtrl.text) ?? 1;
+
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Table(
+                  defaultColumnWidth: const FixedColumnWidth(100),
+                  children: [
+                    TableRow(
+                      children: [
+                        _tableCell("Day/Time", isHeader: true),
+                        ...List.generate(classes, (c) => _tableCell(calculateTime(c), isHeader: true)),
+                      ],
+                    ),
+                    ...List.generate(days, (r) {
+                      return TableRow(
+                        children: [
+                          _tableCell(weekDays[r % 7], isHeader: true, isDay: true),
+                          ...List.generate(classes, (c) {
+                            return Container(
+                              margin: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(color: routineGrey, borderRadius: BorderRadius.circular(8)),
+                              child: TextField(
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 12),
+                                decoration: const InputDecoration(border: InputBorder.none, hintText: "..."),
+                                onChanged: (val) => routineData["$r-$c"] = val,
+                              ),
+                            );
+                          }),
+                        ],
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 40.0),
+          child: _actionButton(
+              "Post Routine",
+                  () => setState(() => isMade = 2),
+              routineBlack,
+              routineWhite
+          ),
+        ),
+      ],
+    );
+  }
+
   // Label text used above input fields
   Widget _inputLabel(String label) {
     return Padding(
@@ -122,6 +185,23 @@ class _RoutinePageState extends State<RoutinePage> {
           prefixIcon: Icon(icon, color: Colors.grey, size: 20),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.all(15),
+        ),
+      ),
+    );
+  }
+
+  // Table cell widget used in both editor & final routine view
+  Widget _tableCell(String text, {bool isHeader = false, bool isDay = false, Color? color}) {
+    return Container(
+      color: color,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: isHeader ? FontWeight.w900 : FontWeight.normal,
+          fontSize: isDay ? 11 : 12,
+          color: isDay ? routineAccent : routineBlack,
         ),
       ),
     );

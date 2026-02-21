@@ -9,8 +9,6 @@ class RoutinePage extends StatefulWidget {
 
 class _RoutinePageState extends State<RoutinePage> {
   int isMade = 0;
-  int timeLimit = 0;
-  int timeIndex = -1;
   // EduMate Color Palette
   static const Color routineWhite = Colors.white;
   static const Color routineBlack = Color(0xFF111827); // Deep Black/Grey
@@ -28,20 +26,33 @@ class _RoutinePageState extends State<RoutinePage> {
     "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
   ];
 
+  int classPossible(String startTime, int duration, int classes) {
+    try {
+      List<String> parts = startTime.split(':');
+      int startHour = int.parse(parts[0]);
+      int startMin = parts.length > 1 ? int.parse(parts[1]) : 0;
+      int startTotal = (startHour * 60) + startMin;
+
+      if (startTotal >= 1440 || duration <= 0) return 0;
+      int remainingMinutes = 1440 - startTotal;
+      int classesPossible = remainingMinutes ~/ duration;
+      if (classesPossible >= classes){
+        return classes;
+      } else {
+        return classesPossible;
+      }
+    } catch (e) {
+      return 0;
+    }
+  }
 
   String calculateTime(int slotIndex) {
     try {
       List<String> parts = _startTimeCtrl.text.split(':');
       int startHour = int.parse(parts[0]);
       int startMin = parts.length > 1 ? int.parse(parts[1]) : 0;
-
       int duration = int.parse(_durationCtrl.text);
-
       int totalMins = (startHour * 60) + startMin + (duration * slotIndex);
-      if (totalMins >= 24 * 60) {
-        timeLimit = 1;
-        timeIndex = slotIndex;
-      }
       int finalHour = (totalMins ~/ 60) % 24;
       int finalMin = totalMins % 60;
       String period = finalHour >= 12 ? "PM" : "AM";
@@ -97,7 +108,6 @@ class _RoutinePageState extends State<RoutinePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 40),
-          // const Text("Welcome back to", style: TextStyle(fontSize: 16, color: Colors.grey)),
           const Text("EduMate", style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold, color: routineBlack)),
           const SizedBox(height: 40),
           _inputLabel("Start Time"),
@@ -119,11 +129,12 @@ class _RoutinePageState extends State<RoutinePage> {
 
   // Routine editor grid
   Widget _buildGridEditor() {
-    int classes = int.tryParse(_numClassesCtrl.text) ?? 7;
-      if (timeIndex != -1) {
-        classes = timeIndex;
-      }
+    int slot = int.tryParse(_numClassesCtrl.text) ?? 7;
+    int duration = int.tryParse(_durationCtrl.text) ?? 60;
+
+    int classes = classPossible(_startTimeCtrl.text, duration, slot);
     int days = int.tryParse(_numDaysCtrl.text) ?? 5;
+    if(days >= 7) days = 7;
 
     return Column(
       children: [
@@ -183,10 +194,10 @@ class _RoutinePageState extends State<RoutinePage> {
 
   // Final routine display
   Widget _buildFinalView(){
-    int classes = int.tryParse(_numClassesCtrl.text) ?? 7;
-    if (timeIndex != -1) {
-      classes = timeIndex;
-    }
+    int slot = int.tryParse(_numClassesCtrl.text) ?? 7;
+    int duration = int.tryParse(_durationCtrl.text) ?? 60;
+
+    int classes = classPossible(_startTimeCtrl.text, duration, slot);
     int days = int.tryParse(_numDaysCtrl.text) ?? 5;
     if(days >= 7) days = 7;
 

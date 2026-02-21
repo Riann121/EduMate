@@ -27,6 +27,7 @@ class _RoutinePageState extends State<RoutinePage> {
     "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
   ];
 
+
   String calculateTime(int slotIndex) {
     try {
       List<String> parts = _startTimeCtrl.text.split(':');
@@ -70,8 +71,18 @@ class _RoutinePageState extends State<RoutinePage> {
             },
           ) : null,
         ),
-      body:_buildGridEditor()
+      body:_buildStep()
     );
+  }
+
+//Main Body of the page
+  Widget _buildStep() {
+    switch (isMade) {
+      case 0: return _buildSetupView();
+      case 1: return _buildGridEditor();
+      case 2: return _buildFinalView();//the final and last page
+      default: return _buildSetupView();
+    }
   }
 
   // Setup screen (input form)
@@ -162,6 +173,9 @@ class _RoutinePageState extends State<RoutinePage> {
       ],
     );
   }
+
+  // Final routine display
+  _buildFinalView(){}
 
   // Label text used above input fields
   Widget _inputLabel(String label) {

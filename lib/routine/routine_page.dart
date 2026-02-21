@@ -9,7 +9,8 @@ class RoutinePage extends StatefulWidget {
 
 class _RoutinePageState extends State<RoutinePage> {
   int isMade = 0;
-
+  int timeLimit = 0;
+  int timeIndex = -1;
   // EduMate Color Palette
   static const Color routineWhite = Colors.white;
   static const Color routineBlack = Color(0xFF111827); // Deep Black/Grey
@@ -37,9 +38,12 @@ class _RoutinePageState extends State<RoutinePage> {
       int duration = int.parse(_durationCtrl.text);
 
       int totalMins = (startHour * 60) + startMin + (duration * slotIndex);
+      if (totalMins >= 24 * 60) {
+        timeLimit = 1;
+        timeIndex = slotIndex;
+      }
       int finalHour = (totalMins ~/ 60) % 24;
       int finalMin = totalMins % 60;
-
       String period = finalHour >= 12 ? "PM" : "AM";
       int displayHour = finalHour % 12 == 0 ? 12 : finalHour % 12;
       return "$displayHour:${finalMin.toString().padLeft(2, '0')} $period";
@@ -115,8 +119,11 @@ class _RoutinePageState extends State<RoutinePage> {
 
   // Routine editor grid
   Widget _buildGridEditor() {
-    int classes = int.tryParse(_numClassesCtrl.text) ?? 1;
-    int days = int.tryParse(_numDaysCtrl.text) ?? 1;
+    int classes = int.tryParse(_numClassesCtrl.text) ?? 7;
+      if (timeIndex != -1) {
+        classes = timeIndex;
+      }
+    int days = int.tryParse(_numDaysCtrl.text) ?? 5;
 
     return Column(
       children: [
@@ -177,6 +184,9 @@ class _RoutinePageState extends State<RoutinePage> {
   // Final routine display
   Widget _buildFinalView(){
     int classes = int.tryParse(_numClassesCtrl.text) ?? 7;
+    if (timeIndex != -1) {
+      classes = timeIndex;
+    }
     int days = int.tryParse(_numDaysCtrl.text) ?? 5;
     if(days >= 7) days = 7;
 

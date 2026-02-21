@@ -175,9 +175,11 @@ class _RoutinePageState extends State<RoutinePage> {
   }
 
   // Final routine display
-  _buildFinalView(){
+  Widget _buildFinalView(){
     int classes = int.tryParse(_numClassesCtrl.text) ?? 7;
     int days = int.tryParse(_numDaysCtrl.text) ?? 5;
+    if(days >= 7) days = 7;
+
 
     return Column(
       children: [

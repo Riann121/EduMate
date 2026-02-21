@@ -175,7 +175,68 @@ class _RoutinePageState extends State<RoutinePage> {
   }
 
   // Final routine display
-  _buildFinalView(){}
+  _buildFinalView(){
+    int classes = int.tryParse(_numClassesCtrl.text) ?? 7;
+    int days = int.tryParse(_numDaysCtrl.text) ?? 5;
+
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Table(
+                  defaultColumnWidth: const FixedColumnWidth(100),
+                  border: TableBorder.all(color: Colors.grey.shade200, width: 1, borderRadius: BorderRadius.circular(8)),
+                  children: [
+                    TableRow(
+                      children: [
+                        _tableCell("Day", isHeader: true, color: routineGrey),
+                        ...List.generate(classes, (c) => _tableCell(calculateTime(c), isHeader: true, color: routineGrey)),
+                      ],
+                    ),
+                    ...List.generate(days, (r) {
+                      return TableRow(
+                        children: [
+                          _tableCell(weekDays[r % 7], isHeader: true),
+                          ...List.generate(classes, (c) {
+                            String subject = routineData["$r-$c"] ?? "";
+                            return Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                children: [
+                                  Text(subject.isEmpty ? "-" : subject, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                                  if (subject.isNotEmpty) Container(height: 4, width: 4, margin: const EdgeInsets.only(top: 4), decoration: const BoxDecoration(color: routineAccent, shape: BoxShape.circle))
+                                ],
+                              ),
+                            );
+                          }),
+                        ],
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 40.0),
+          child: _actionButton(
+              "Update Routine",
+                  () => setState(() => isMade = 0),
+              routineWhite,
+              routineBlack,
+              routineBlack
+          ),
+        ),
+      ],
+    );
+  }
+
 
   // Label text used above input fields
   Widget _inputLabel(String label) {

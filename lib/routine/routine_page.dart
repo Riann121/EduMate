@@ -60,16 +60,16 @@ class _RoutinePageState extends State<RoutinePage> {
             style: const TextStyle(fontWeight: FontWeight.w900, color: routineWhite, fontSize: 22),
           ),
           centerTitle: true,
-          leading: isMade > 0 ? IconButton(
-            icon: const Icon(Icons.arrow_back, color: routineBlack),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: routineWhite),
             onPressed: () {
-              if (isMade == 2) {
+              if (isMade == 2 || isMade == 0) {
                 Navigator.pop(context);
               } else {
                 setState(() => isMade--);
               }
             },
-          ) : null,
+          ),
         ),
       body:_buildStep()
     );

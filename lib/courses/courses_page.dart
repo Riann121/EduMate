@@ -129,7 +129,7 @@ class CourseTile extends StatelessWidget {
     child: SizedBox(
       child: Card(
         color: Color(0xFFF4F7FF),
-        elevation: 1,
+        elevation: 1.5,
         margin: const EdgeInsets.only(bottom: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
@@ -172,9 +172,9 @@ class CourseTile extends StatelessWidget {
 
               // RIGHT SIDE ICON
               const Icon(
-                Icons.keyboard_arrow_right,
+                Icons.menu_book_outlined,
                 size: 22,
-                color: Colors.black54,
+                color: Colors.black,
               ),
             ],
           ),

@@ -6,47 +6,88 @@ class HomeStatsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final layout = _layoutConfig(constraints.maxWidth);
+        return _gridContent(layout);
+      },
+    );
+  }
+
+  _HomeStatsLayout _layoutConfig(double maxWidth) {
+    final isNarrow = maxWidth < 380;
+    return _HomeStatsLayout(
+      horizontalPadding: isNarrow ? 8.0 : 12.0,
+      cardSpacing: isNarrow ? 8.0 : 12.0,
+      cardHeight: isNarrow ? 100.0 : 108.0,
+    );
+  }
+
+  Widget _gridContent(_HomeStatsLayout layout) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: layout.horizontalPadding,
+        vertical: 12,
+      ),
       child: Column(
         children: [
-          Row(
-            children: const [
-              Expanded(
-                child: HomeStatCard(
-                  title: 'Due Tasks',
-                  value: '5',
-                ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: HomeStatCard(
-                  title: 'Upcoming Exams',
-                  value: '2',
-                ),
-              ),
-            ],
+          _statsRow(
+            layout: layout,
+            leftTitle: 'Due Tasks',
+            leftValue: '5',
+            rightTitle: 'Upcoming Exams',
+            rightValue: '2',
           ),
-          const SizedBox(height: 12),
-          Row(
-            children: const [
-              Expanded(
-                child: HomeStatCard(
-                  title: 'Due Assignments',
-                  value: '6',
-                ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: HomeStatCard(
-                  title: 'Due Lab Reports',
-                  value: '4',
-                ),
-              ),
-            ],
+          SizedBox(height: layout.cardSpacing),
+          _statsRow(
+            layout: layout,
+            leftTitle: 'Due Assignments',
+            leftValue: '6',
+            rightTitle: 'Due Lab Reports',
+            rightValue: '4',
           ),
         ],
       ),
     );
   }
+
+  Widget _statsRow({
+    required _HomeStatsLayout layout,
+    required String leftTitle,
+    required String leftValue,
+    required String rightTitle,
+    required String rightValue,
+  }) {
+    return SizedBox(
+      height: layout.cardHeight,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: _statCard(title: leftTitle, value: leftValue),
+          ),
+          SizedBox(width: layout.cardSpacing),
+          Expanded(
+            child: _statCard(title: rightTitle, value: rightValue),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _statCard({required String title, required String value}) {
+    return HomeStatCard(title: title, value: value);
+  }
+}
+
+class _HomeStatsLayout {
+  const _HomeStatsLayout({
+    required this.horizontalPadding,
+    required this.cardSpacing,
+    required this.cardHeight,
+  });
+
+  final double horizontalPadding;
+  final double cardSpacing;
+  final double cardHeight;
 }

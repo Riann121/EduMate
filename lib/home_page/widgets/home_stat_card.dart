@@ -19,6 +19,9 @@ class HomeStatCard extends StatelessWidget {
           children: [
             Text(
               title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
               style: TextStyle(
                 color: AppColors.onSurfaceVariant,
                 fontWeight: FontWeight.w600,

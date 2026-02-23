@@ -35,7 +35,9 @@ class FinalPage extends StatelessWidget {
     if (days > 7) days = 7;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Final Routine")),
+      appBar: AppBar(title: const Text("Routine", style: TextStyle(fontWeight: FontWeight.w900),),
+        centerTitle: true,
+      ),
       body: Column(
         children: [
           Expanded(

@@ -21,17 +21,13 @@ class _RoutinePageState extends State<RoutinePage> {
   void resetStep() => setState(() => currentStep = 0);
 
   // ---------------- CONTROLLERS (SHARED) ----------------
-  final TextEditingController startTimeCtrl =
-  TextEditingController(text: "08:00");
+  final TextEditingController startTimeCtrl = TextEditingController(text: "08:00");
 
-  final TextEditingController durationCtrl =
-  TextEditingController(text: "60");
+  final TextEditingController durationCtrl = TextEditingController(text: "60");
 
-  final TextEditingController numClassesCtrl =
-  TextEditingController(text: "5");
+  final TextEditingController numClassesCtrl = TextEditingController(text: "5");
 
-  final TextEditingController numDaysCtrl =
-  TextEditingController(text: "6");
+  final TextEditingController numDaysCtrl = TextEditingController(text: "6");
 
   // ---------------- ROUTINE DATA ----------------
   Map<String, String> routineData = {};

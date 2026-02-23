@@ -39,7 +39,8 @@ class GridEditorPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Routine"),
+        title: const Text("Edit Routine",style: TextStyle(fontWeight: FontWeight.w900)),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: onBack,
@@ -64,7 +65,7 @@ class GridEditorPage extends StatelessWidget {
                           const RoutineTableCell("Day/Time", isHeader: true),
                           ...List.generate(
                             classes,
-                                (c) => RoutineTableCell(
+                            (c) => RoutineTableCell(
                               calculateTime(c, startTimeCtrl, durationCtrl),
                               isHeader: true,
                             ),
@@ -95,7 +96,8 @@ class GridEditorPage extends StatelessWidget {
                                     hintText: "...",
                                     contentPadding: EdgeInsets.all(8),
                                   ),
-                                  onChanged: (val) => routineData["$r-$c"] = val,
+                                  onChanged: (val) =>
+                                      routineData["$r-$c"] = val,
                                 ),
                               );
                             }),

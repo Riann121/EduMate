@@ -21,7 +21,8 @@ class SetupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Routine")),
+      appBar: AppBar(title: const Text("Routine",style: TextStyle(fontWeight: FontWeight.w900),),
+        centerTitle: true,),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(30),
         child: Column(

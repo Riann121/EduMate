@@ -35,11 +35,8 @@ class AppTheme {
       onPrimary: AppColors.onPrimary,
       secondary: AppColors.primary,
       onSecondary: AppColors.onPrimary,
-      error: AppColors.error,
-      onError: AppColors.onError,
       surface: AppColors.surface,
       onSurface: AppColors.onSurface,
-      outline: AppColors.outline,
     );
   }
 

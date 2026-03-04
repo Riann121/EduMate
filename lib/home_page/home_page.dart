@@ -35,6 +35,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   // ---------- AppBar Widget ----------
+  // AppBar _homePageAppBar() {
+  //   return AppBar(
+  //     title: const Text(
+  //       'EduMate',
+  //       style: TextStyle(fontWeight: FontWeight.w900),
+  //     ),
+  //     centerTitle: true,
+  //   );
+  // }
   AppBar _homePageAppBar() {
     return AppBar(
       title: const Text(

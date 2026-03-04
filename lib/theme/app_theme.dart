@@ -20,21 +20,33 @@ class AppTheme {
 
   //helper methods to build theme components
   TextTheme _textTheme() {
-    return GoogleFonts.montserratTextTheme().apply(
+    return GoogleFonts.montserratTextTheme().apply( //copy default theme and override it
       bodyColor: AppColors.onSurface,
       displayColor: AppColors.onSurface,
     );
   }
 
+  // ColorScheme _colorScheme() {
+  //   return ColorScheme.fromSeed(
+  //     seedColor: AppColors.primary,
+  //     brightness: Brightness.light,
+  //   ).copyWith(
+  //     primary: AppColors.primary,
+  //     onPrimary: AppColors.onPrimary,
+  //     secondary: AppColors.primary,
+  //     onSecondary: AppColors.onPrimary,
+  //     surface: AppColors.surface,
+  //     onSurface: AppColors.onSurface,
+  //   );
+  // }
+
   ColorScheme _colorScheme() {
     return ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
+      seedColor: AppColors.primary, //main theme color
       brightness: Brightness.light,
     ).copyWith(
-      primary: AppColors.primary,
+      primary: AppColors.primary, //overriden the specific colors from the seed
       onPrimary: AppColors.onPrimary,
-      secondary: AppColors.primary,
-      onSecondary: AppColors.onPrimary,
       surface: AppColors.surface,
       onSurface: AppColors.onSurface,
     );

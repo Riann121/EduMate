@@ -26,20 +26,6 @@ class AppTheme {
     );
   }
 
-  // ColorScheme _colorScheme() {
-  //   return ColorScheme.fromSeed(
-  //     seedColor: AppColors.primary,
-  //     brightness: Brightness.light,
-  //   ).copyWith(
-  //     primary: AppColors.primary,
-  //     onPrimary: AppColors.onPrimary,
-  //     secondary: AppColors.primary,
-  //     onSecondary: AppColors.onPrimary,
-  //     surface: AppColors.surface,
-  //     onSurface: AppColors.onSurface,
-  //   );
-  // }
-
   ColorScheme _colorScheme() {
     return ColorScheme.fromSeed(
       seedColor: AppColors.primary, //main theme color
@@ -65,7 +51,7 @@ class AppTheme {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.onPrimary,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderRadius: BorderRadius.all(Radius.circular(5)),
         ),
       ),
     );
@@ -76,7 +62,7 @@ class AppTheme {
       filled: true,
       fillColor: AppColors.surfaceContainerHighest,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
         borderSide: BorderSide.none,
       ),
     );
@@ -90,8 +76,8 @@ class AppTheme {
       elevation: 1,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-        side: BorderSide(color: Color(0xFFD0D0D0), width: 1.2),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        side: BorderSide(color: Color(0xFFD0D0D0), width: 1.5),
       ),
     );
   }

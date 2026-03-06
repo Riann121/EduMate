@@ -21,35 +21,31 @@ class _UpcomingExamsSectionState extends State<UpcomingExamsSection> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 18, 14, 12),
-      decoration: _sectionBoxDecoration(context),
+      decoration: _sectionContainerDecoration(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionTitle(context),
+          Text(
+            "Upcoming Exams This Week",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
           const SizedBox(height: 14),
-          ..._sectionContent(),
+          ..._sectionContent(), //spread operator
         ],
       ),
     );
   }
 
-  BoxDecoration _sectionBoxDecoration(BuildContext context) {
+
+  BoxDecoration _sectionContainerDecoration(BuildContext context) {
     return BoxDecoration(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(12),
       border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
-    );
-  }
-
-  //ttle for the section
-  Widget _sectionTitle(BuildContext context) {
-    return Text(
-      "Upcoming Exams This Week",
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.onSurface,
-        fontSize: 20,
-        fontWeight: FontWeight.w800,
-      ),
     );
   }
 
@@ -60,41 +56,9 @@ class _UpcomingExamsSectionState extends State<UpcomingExamsSection> {
       return [_emptyState()];
     }
 
-    return _upcomingExams
-        .asMap()
-        .entries
-        .map((entry) {
-          return _examTile(index: entry.key, item: entry.value);
-        })
+    return _upcomingExams.asMap().entries
+        .map((entry) {return _examTile(index: entry.key, item: entry.value);})
         .toList(growable: false);
-  }
-
-  //exam tile for each upcoming exam item in the list
-  Widget _examTile({required int index, required UpcomingExamItem item}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: const Color(0xFFEFEFEF),
-        borderRadius: BorderRadius.circular(14),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(14),
-          onTap: () => _showExamDetailsDialog(index),
-          child: _examTileChildren(item),
-        ),
-      ),
-    );
-  }
-
-  Widget _examTileChildren(UpcomingExamItem item) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
-      child: Row(
-        children: [
-          Expanded(child: _examTileDetails(item)),
-          _examTileTrailingIcon(),
-        ],
-      ),
-    );
   }
 
   Widget _emptyState() {
@@ -107,43 +71,52 @@ class _UpcomingExamsSectionState extends State<UpcomingExamsSection> {
     );
   }
 
+  //exam tile for each upcoming exam item in the list
+  Widget _examTile({required int index, required UpcomingExamItem item}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Card(
+        color: const Color(0xFFEFEFEF),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => _showExamDetailsDialog(index),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+            child: Row(
+              children: [
+                Expanded(child: _examTileDetails(item)),
+                Icon(Icons.chevron_right_rounded, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
   Widget _examTileDetails(UpcomingExamItem item) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _examTitleText(item.examTitle),
+        Text(
+          item.examTitle,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         const SizedBox(height: 3),
-        _examCourseText(item.courseName),
+        Text(
+          item.courseName,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ],
-    );
-  }
-
-  Widget _examTitleText(String value) {
-    return Text(
-      value,
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.onSurface,
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-      ),
-    );
-  }
-
-  Widget _examCourseText(String value) {
-    return Text(
-      value,
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
-        fontSize: 13,
-        fontWeight: FontWeight.w600,
-      ),
-    );
-  }
-
-  Widget _examTileTrailingIcon() {
-    return Icon(
-      Icons.chevron_right_rounded,
-      color: Theme.of(context).colorScheme.onSurfaceVariant,
     );
   }
 
@@ -156,6 +129,7 @@ class _UpcomingExamsSectionState extends State<UpcomingExamsSection> {
       builder: (dialogContext) {
         return AlertDialog(
           title: const Text('Exam Details'),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,

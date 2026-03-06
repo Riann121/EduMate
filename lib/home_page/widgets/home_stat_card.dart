@@ -1,41 +1,44 @@
 import 'package:edumate/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class HomeStatCard extends StatelessWidget {
+class HomeStatCard extends StatefulWidget {
   final String title;
   final String value;
 
   const HomeStatCard({super.key, required this.title, required this.value});
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+  State<HomeStatCard> createState() => _HomeStatCardState();
+}
 
+class _HomeStatCardState extends State<HomeStatCard> {
+  @override
+  Widget build(BuildContext context) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //title
             Text(
-              title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
+              widget.title,
               style: TextStyle(
-                color: AppColors.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: TextStyle(
-                color: colorScheme.onSurface,
-                fontSize: 22,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
               ),
             ),
+            const SizedBox(height: 8),
+            //value
+            Text(
+              widget.value,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+              ),
+            )
           ],
         ),
       ),

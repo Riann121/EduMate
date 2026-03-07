@@ -21,9 +21,8 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return Card(
       color: const Color(0xFFEFEFEF),
-      borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),

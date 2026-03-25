@@ -42,6 +42,7 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Cancel'),
         ),
+        //save btn
         ElevatedButton(
           onPressed: _saveTask,
           style: ElevatedButton.styleFrom(
@@ -69,12 +70,19 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
     );
   }
 
+
   Widget _buildTitleTextField() {
     return TextField(
       controller: _titleController,
-      decoration: _buildTextFieldDecoration(
+      decoration: InputDecoration(
         labelText: 'Task title',
+        filled: true,
+        fillColor: Colors.white,
         errorText: _titleError,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }
@@ -82,7 +90,15 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
   Widget _buildDetailTextField() {
     return TextField(
       controller: _detailController,
-      decoration: _buildTextFieldDecoration(labelText: 'Details'),
+      decoration: InputDecoration(
+        labelText: 'Details',
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
     );
   }
 
@@ -107,21 +123,6 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
     );
   }
 
-  InputDecoration _buildTextFieldDecoration({
-    required String labelText,
-    String? errorText,
-  }) {
-    return InputDecoration(
-      labelText: labelText,
-      filled: true,
-      fillColor: Colors.white,
-      errorText: errorText,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
-      ),
-    );
-  }
 
   Future<void> _pickDate() async {
     final now = DateTime.now();

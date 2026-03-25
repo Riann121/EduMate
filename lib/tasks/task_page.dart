@@ -72,7 +72,7 @@ class _TaskPageState extends State<TaskPage> {
       return Center(
         child: Text(
           'No Tasks Left!',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
         ),
       );
     }

@@ -211,6 +211,41 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return AlertDialog(
+      backgroundColor: const Color(0xFFEFEFEF),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Text('Edit Task'),
+      content: _buildDialogContent(),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text('Cancel')
+        ),
+        ElevatedButton(
+          onPressed: _saveTask,
+          child: Text('Save')
+        ),
+      ],
+    );
+  }
+
+  void _saveTask() {
+    final title = _titleController.text.trim();
+    final detail = _detailController.text.trim();
+
+    if(title.isEmpty) {
+      setState(() {
+        _titleError = 'Title Required!';
+      });
+      return;
+    }
+
+    Navigator.of(context).pop(
+        TaskItem(
+          title: title,
+          detail: detail.isEmpty ? null:detail,
+          dueDate: _selectedDate,
+        )
+    );
   }
 }

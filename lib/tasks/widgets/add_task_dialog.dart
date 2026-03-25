@@ -55,6 +55,26 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
     );
   }
 
+  void _saveTask() {
+    final title = _titleController.text.trim();
+    final detail = _detailController.text.trim();
+
+    if(title.isEmpty) {
+      setState(() {
+        _titleError = 'Title Required!';
+      });
+      return;
+    }
+
+    Navigator.of(context).pop(
+        TaskItem(
+          title: title,
+          detail: detail.isEmpty ? null:detail,
+          dueDate: _selectedDate,
+        )
+    );
+  }
+
   Widget _buildDialogContent() {
     return SingleChildScrollView(
       child: Column(
@@ -147,26 +167,5 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
     final month = date.month.toString().padLeft(2, '0');
     final year = date.year.toString();
     return '$day/$month/$year';
-  }
-
-
-  void _saveTask() {
-    final title = _titleController.text.trim();
-    final detail = _detailController.text.trim();
-
-    if(title.isEmpty) {
-      setState(() {
-        _titleError = 'Title Required!';
-      });
-      return;
-    }
-
-    Navigator.of(context).pop(
-      TaskItem(
-        title: title,
-        detail: detail.isEmpty ? null:detail,
-        dueDate: _selectedDate,
-      )
-    );
   }
 }

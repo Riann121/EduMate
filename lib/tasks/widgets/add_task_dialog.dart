@@ -102,6 +102,7 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
     );
   }
 
+
   Widget _buildDatePickerField() {
     return InkWell(
       onTap: _pickDate,
@@ -114,23 +115,22 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
         ),
         child: Row(
           children: [
-            const Icon(Icons.calendar_today, size: 18),
-            const SizedBox(width: 10),
+            Icon(Icons.calendar_today, size: 16,),
+            SizedBox(width: 10),
             Text(_formatDate(_selectedDate)),
           ],
-        ),
+        )
       ),
     );
   }
 
-
   Future<void> _pickDate() async {
     final now = DateTime.now();
     final pickedDate = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
       firstDate: DateTime(now.year - 1),
       lastDate: DateTime(now.year + 5),
+      context: context,
+      initialDate: _selectedDate,
     );
 
     if (pickedDate == null) {
@@ -142,13 +142,21 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
     });
   }
 
+  String _formatDate(DateTime date) {
+    final day = date.day.toString().padLeft(2, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final year = date.year.toString();
+    return '$day/$month/$year';
+  }
+
+
   void _saveTask() {
     final title = _titleController.text.trim();
     final detail = _detailController.text.trim();
 
-    if (title.isEmpty) {
+    if(title.isEmpty) {
       setState(() {
-        _titleError = 'Title is required';
+        _titleError = 'Title Required!';
       });
       return;
     }
@@ -156,16 +164,9 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
     Navigator.of(context).pop(
       TaskItem(
         title: title,
-        detail: detail.isEmpty ? null : detail,
+        detail: detail.isEmpty ? null:detail,
         dueDate: _selectedDate,
-      ),
+      )
     );
-  }
-
-  String _formatDate(DateTime date) {
-    final day = date.day.toString().padLeft(2, '0');
-    final month = date.month.toString().padLeft(2, '0');
-    final year = date.year.toString();
-    return '$day/$month/$year';
   }
 }

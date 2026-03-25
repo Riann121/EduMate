@@ -57,7 +57,7 @@ class _UpcomingExamsSectionState extends State<UpcomingExamsSection> {
     }
 
     return _upcomingExams.asMap().entries
-        .map((entry) {return _examTile(index: entry.key, item: entry.value);})
+        .map((entry) {return _examTile(index: entry.key, item: entry.value);}) //turning objects in widgets
         .toList(growable: false);
   }
 

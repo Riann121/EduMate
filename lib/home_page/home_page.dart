@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
       child: ListView(
         children: [
           const SizedBox(height: 16),
-          _bodyTitle(),
+          _welcomeTextTitle(),
           const SizedBox(height: 16),
           const HomeStatsGrid(),
           const SizedBox(height: 50),
@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // body title
-  Widget _bodyTitle() {
+  Widget _welcomeTextTitle() {
     return Padding(
       padding: const EdgeInsets.only(left: 12),
       child: const Text(

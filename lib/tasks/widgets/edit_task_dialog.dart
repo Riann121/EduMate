@@ -248,4 +248,51 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
         )
     );
   }
+
+  Widget _buildDialogContent() {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildTitleTextField(),
+          const SizedBox(height: 12),
+          _buildDetailTextField(),
+          const SizedBox(height: 12),
+          _buildDatePickerField(),
+        ],
+      ),
+    );
+  }
+
+
+  Widget _buildTitleTextField() {
+    return TextField(
+      controller: _titleController,
+      decoration: InputDecoration(
+        labelText: 'Task title',
+        filled: true,
+        fillColor: Colors.white,
+        errorText: _titleError,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailTextField() {
+    return TextField(
+      controller: _detailController,
+      decoration: InputDecoration(
+        labelText: 'Details',
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
 }

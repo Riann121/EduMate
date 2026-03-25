@@ -295,4 +295,50 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
       ),
     );
   }
+
+  Widget _buildDatePickerField() {
+    return InkWell(
+      onTap: _pickDate,
+      borderRadius: BorderRadius.circular(12),
+      child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.calendar_today, size: 16,),
+              SizedBox(width: 10),
+              Text(_formatDate(_selectedDate)),
+            ],
+          )
+      ),
+    );
+  }
+
+  Future<void> _pickDate() async {
+    final now = DateTime.now();
+    final pickedDate = await showDatePicker(
+      firstDate: DateTime(now.year - 1),
+      lastDate: DateTime(now.year + 5),
+      context: context,
+      initialDate: _selectedDate,
+    );
+
+    if (pickedDate == null) {
+      return;
+    }
+
+    setState(() {
+      _selectedDate = pickedDate;
+    });
+  }
+
+  String _formatDate(DateTime date) {
+    final day = date.day.toString().padLeft(2, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final year = date.year.toString();
+    return '$day/$month/$year';
+  }
 }

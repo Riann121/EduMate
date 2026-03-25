@@ -218,20 +218,30 @@ class _CoursesPageState extends State<CoursesPage> {
           style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white),
         ),
       ),
-      body: SafeArea(child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'Courses',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-
-
-          ],
-      )),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Courses',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              const SectionTitle('Theory'),
+              ..._theoryCourses.map(
+                (c) => CourseTile(course: c, onTap: () => _openCourse(c)),
+              ),
+              const SizedBox(height: 16),
+              const Divider(thickness: 0.5, height: 24),
+              const SectionTitle('Lab'),
+              ..._labCourses.map(
+                (c) => CourseTile(course: c, onTap: () => _openCourse(c)),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -255,9 +265,9 @@ class SectionTitle extends StatelessWidget {
     padding: const EdgeInsets.only(bottom: 8),
     child: Text(
       text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600,
-      ))
-    );
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+    ),
+  );
 }
 
 class CourseTile extends StatelessWidget {
@@ -267,49 +277,60 @@ class CourseTile extends StatelessWidget {
   const CourseTile({super.key, required this.course, required this.onTap});
 
   @override
-  Widget build(BuildContext context) =>
-      InkWell(
-
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: SizedBox(
-          child: Card(
-            color: Color(0xFFF4F7FF),
-            elevation: 1.5,
-            margin: const EdgeInsets.only(bottom: 10),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    course.courseName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.onSurface,
-                      fontSize: 14,
+  Widget build(BuildContext context) => InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(8),
+    child: SizedBox(
+      child: Card(
+        color: Color(0xFFF4F7FF),
+        elevation: 1.5,
+        margin: const EdgeInsets.only(bottom: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      course.courseName,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.onSurface,
+                        fontSize: 14,
+                      ),
                     ),
-                  ), const SizedBox(height: 4),
-                  Text(course.teacherName,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.onSurfaceVariant,
+                    const SizedBox(height: 4),
+                    Text(
+                      course.teacherName,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.onSurfaceVariant,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text('No. of assignments',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.onSurfaceVariant,
+                    const SizedBox(height: 12),
+                    Text(
+                      'No. of assignments',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.onSurfaceVariant,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              const Icon(
+                Icons.menu_book_outlined,
+                size: 22,
+                color: Colors.black,
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    ),
+  );
 }
-

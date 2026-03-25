@@ -218,20 +218,20 @@ class _CoursesPageState extends State<CoursesPage> {
           style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white),
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Courses',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
-        ),
+      body: SafeArea(child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Courses',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+
+
+          ],
+      )),
       ),
     );
   }
@@ -245,3 +245,71 @@ class CourseItem {
 
   const CourseItem(this.courseName, this.teacherName, this.page);
 }
+
+class SectionTitle extends StatelessWidget {
+  final String text;
+  const SectionTitle(this.text, {super.key});
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Text(
+      text,
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600,
+      ))
+    );
+}
+
+class CourseTile extends StatelessWidget {
+  final CourseItem course;
+  final VoidCallback onTap;
+
+  const CourseTile({super.key, required this.course, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) =>
+      InkWell(
+
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: SizedBox(
+          child: Card(
+            color: Color(0xFFF4F7FF),
+            elevation: 1.5,
+            margin: const EdgeInsets.only(bottom: 10),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    course.courseName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.onSurface,
+                      fontSize: 14,
+                    ),
+                  ), const SizedBox(height: 4),
+                  Text(course.teacherName,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text('No. of assignments',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+}
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:edumate/courses//course_details_page_template.dart';
+import 'package:edumate/courses/utility/assignment_item.dart';
 
 class DataStructuresLab extends StatelessWidget {
   const DataStructuresLab({super.key});

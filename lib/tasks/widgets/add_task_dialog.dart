@@ -42,6 +42,7 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Cancel'),
         ),
+        //save btn
         ElevatedButton(
           onPressed: _saveTask,
           style: ElevatedButton.styleFrom(
@@ -51,6 +52,26 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
           child: const Text('Save'),
         ),
       ],
+    );
+  }
+
+  void _saveTask() {
+    final title = _titleController.text.trim();
+    final detail = _detailController.text.trim();
+
+    if(title.isEmpty) {
+      setState(() {
+        _titleError = 'Title Required!';
+      });
+      return;
+    }
+
+    Navigator.of(context).pop(
+        TaskItem(
+          title: title,
+          detail: detail.isEmpty ? null:detail,
+          dueDate: _selectedDate,
+        )
     );
   }
 
@@ -69,12 +90,19 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
     );
   }
 
+
   Widget _buildTitleTextField() {
     return TextField(
       controller: _titleController,
-      decoration: _buildTextFieldDecoration(
+      decoration: InputDecoration(
         labelText: 'Task title',
+        filled: true,
+        fillColor: Colors.white,
         errorText: _titleError,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }
@@ -82,9 +110,18 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
   Widget _buildDetailTextField() {
     return TextField(
       controller: _detailController,
-      decoration: _buildTextFieldDecoration(labelText: 'Details'),
+      decoration: InputDecoration(
+        labelText: 'Details',
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
     );
   }
+
 
   Widget _buildDatePickerField() {
     return InkWell(
@@ -98,27 +135,11 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
         ),
         child: Row(
           children: [
-            const Icon(Icons.calendar_today, size: 18),
-            const SizedBox(width: 10),
+            Icon(Icons.calendar_today, size: 16,),
+            SizedBox(width: 10),
             Text(_formatDate(_selectedDate)),
           ],
-        ),
-      ),
-    );
-  }
-
-  InputDecoration _buildTextFieldDecoration({
-    required String labelText,
-    String? errorText,
-  }) {
-    return InputDecoration(
-      labelText: labelText,
-      filled: true,
-      fillColor: Colors.white,
-      errorText: errorText,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
+        )
       ),
     );
   }
@@ -126,10 +147,10 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
   Future<void> _pickDate() async {
     final now = DateTime.now();
     final pickedDate = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
       firstDate: DateTime(now.year - 1),
       lastDate: DateTime(now.year + 5),
+      context: context,
+      initialDate: _selectedDate,
     );
 
     if (pickedDate == null) {
@@ -139,26 +160,6 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
     setState(() {
       _selectedDate = pickedDate;
     });
-  }
-
-  void _saveTask() {
-    final title = _titleController.text.trim();
-    final detail = _detailController.text.trim();
-
-    if (title.isEmpty) {
-      setState(() {
-        _titleError = 'Title is required';
-      });
-      return;
-    }
-
-    Navigator.of(context).pop(
-      TaskItem(
-        title: title,
-        detail: detail.isEmpty ? null : detail,
-        dueDate: _selectedDate,
-      ),
-    );
   }
 
   String _formatDate(DateTime date) {

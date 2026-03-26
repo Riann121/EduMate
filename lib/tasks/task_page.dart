@@ -31,12 +31,48 @@ class _TaskPageState extends State<TaskPage> {
   }
 
   //task list
+  // Widget _taskListBody() {
+  //   if (_tasks.isEmpty) {
+  //     return const Center(
+  //       child: Text(
+  //         'No tasks left',
+  //         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+  //       ),
+  //     );
+  //   }
+  //
+  //   return ListView.builder(
+  //     padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+  //     itemCount: _tasks.length,
+  //     itemBuilder: (context, index) {
+  //       final task = _tasks[index];
+  //       return Padding(
+  //         padding: const EdgeInsets.only(bottom: 10),
+  //         child: TaskTile(
+  //           title: task.title,
+  //           detail: task.detail,
+  //           dueDate: task.dueDate,
+  //           isCompleted: false,
+  //           onTap: () => _onTaskTileTapped(index),
+  //           onChanged: (value) {
+  //             if (value == true) {
+  //               setState(() {
+  //                 _tasks.removeAt(index);
+  //               });
+  //             }
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   Widget _taskListBody() {
-    if (_tasks.isEmpty) {
-      return const Center(
+    if(_tasks.isEmpty) {
+      return Center(
         child: Text(
-          'No tasks left',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          'No Tasks Left!',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
         ),
       );
     }
@@ -47,7 +83,7 @@ class _TaskPageState extends State<TaskPage> {
       itemBuilder: (context, index) {
         final task = _tasks[index];
         return Padding(
-          padding: const EdgeInsets.only(bottom: 10),
+          padding: EdgeInsets.only(bottom: 12),
           child: TaskTile(
             title: task.title,
             detail: task.detail,
@@ -55,7 +91,7 @@ class _TaskPageState extends State<TaskPage> {
             isCompleted: false,
             onTap: () => _onTaskTileTapped(index),
             onChanged: (value) {
-              if (value == true) {
+              if(value == true) {
                 setState(() {
                   _tasks.removeAt(index);
                 });
@@ -63,7 +99,7 @@ class _TaskPageState extends State<TaskPage> {
             },
           ),
         );
-      },
+      }
     );
   }
 

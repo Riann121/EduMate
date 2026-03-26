@@ -35,6 +35,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   // ---------- AppBar Widget ----------
+  // AppBar _homePageAppBar() {
+  //   return AppBar(
+  //     title: const Text(
+  //       'EduMate',
+  //       style: TextStyle(fontWeight: FontWeight.w900),
+  //     ),
+  //     centerTitle: true,
+  //   );
+  // }
   AppBar _homePageAppBar() {
     return AppBar(
       title: const Text(
@@ -46,6 +55,83 @@ class _HomePageState extends State<HomePage> {
   }
 
   // ---------- Drawer Widget ----------
+  // Drawer _drawerWidget() {
+  //   return Drawer(
+  //     backgroundColor: Theme.of(context).colorScheme.surface,
+  //     child: ListView(
+  //       padding: EdgeInsets.zero,
+  //       children: [
+  //         _drawerHeader(),
+  //         _tasksTile(),
+  //         _routineTile(),
+  //         _coursesTile(),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // Drawer Header with logo and error handling for image loading
+  // DrawerHeader _drawerHeader() {
+  //   return DrawerHeader(
+  //     child: Center(
+  //       child: Image.asset(
+  //         'assets/logos/edumate_logo.png',
+  //         width: 80,
+  //         height: 80,
+  //         fit: BoxFit.contain,
+  //         errorBuilder: (context, error, stackTrace) {
+  //           return Icon(
+  //             Icons.broken_image_outlined,
+  //             size: 80,
+  //             color: Theme.of(context).colorScheme.primary,
+  //           );
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
+  //
+  // //tiles for navigation in drawer
+  // ListTile _coursesTile() {
+  //   return _drawerNavigationTile(
+  //     title: 'Courses',
+  //     icon: Icons.menu_book_outlined,
+  //     routeName: '/courses',
+  //   );
+  // }
+  //
+  // ListTile _routineTile() {
+  //   return _drawerNavigationTile(
+  //     title: 'Routine',
+  //     icon: Icons.schedule_outlined,
+  //     routeName: '/routine',
+  //   );
+  // }
+  //
+  // ListTile _tasksTile() {
+  //   return _drawerNavigationTile(
+  //     title: 'Tasks',
+  //     icon: Icons.task_alt_outlined,
+  //     routeName: '/tasks',
+  //   );
+  // }
+  //
+  // //method to create drawer navigation tiles
+  // ListTile _drawerNavigationTile({
+  //   required String title,
+  //   required IconData icon,
+  //   required String routeName,
+  // }) {
+  //   return ListTile(
+  //     leading: Icon(icon),
+  //     title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
+  //     onTap: () {
+  //       Navigator.pop(context);
+  //       Navigator.pushNamed(context, routeName);
+  //     },
+  //   );
+  // }
+
   Drawer _drawerWidget() {
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -61,7 +147,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Drawer Header with logo and error handling for image loading
   DrawerHeader _drawerHeader() {
     return DrawerHeader(
       child: Center(
@@ -70,56 +155,41 @@ class _HomePageState extends State<HomePage> {
           width: 80,
           height: 80,
           fit: BoxFit.contain,
-          errorBuilder: (context, error, stackTrace) {
-            return Icon(
-              Icons.broken_image_outlined,
-              size: 80,
-              color: Theme.of(context).colorScheme.primary,
-            );
-          },
         ),
       ),
     );
   }
 
-  //tiles for navigation in drawer
-  ListTile _coursesTile() {
-    return _drawerNavigationTile(
-      title: 'Courses',
-      icon: Icons.menu_book_outlined,
-      routeName: '/courses',
+  ListTile _tasksTile() {
+    return ListTile(
+      leading: Icon(Icons.task_alt),
+      title: Text('Tasks', style: TextStyle(fontWeight: FontWeight.w500)),
+      onTap: () {
+        Navigator.pop(context);
+        Navigator.pushNamed(context, '/tasks');
+      },
     );
   }
 
   ListTile _routineTile() {
-    return _drawerNavigationTile(
-      title: 'Routine',
-      icon: Icons.schedule_outlined,
-      routeName: '/routine',
-    );
-  }
-
-  ListTile _tasksTile() {
-    return _drawerNavigationTile(
-      title: 'Tasks',
-      icon: Icons.task_alt_outlined,
-      routeName: '/tasks',
-    );
-  }
-
-  //method to create drawer navigation tiles
-  ListTile _drawerNavigationTile({
-    required String title,
-    required IconData icon,
-    required String routeName,
-  }) {
     return ListTile(
-      leading: Icon(icon),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
+      leading: Icon(Icons.schedule),
+      title: Text('Routine', style: TextStyle(fontWeight: FontWeight.w500),),
       onTap: () {
         Navigator.pop(context);
-        Navigator.pushNamed(context, routeName);
+        Navigator.pushNamed(context, '/routine');
       },
+    );
+  }
+
+  ListTile _coursesTile() {
+    return ListTile(
+      leading: Icon(Icons.menu_book),
+      title: Text('Courses', style: TextStyle(fontWeight: FontWeight.w500),),
+      onTap: () {
+        Navigator.pop(context);
+        Navigator.pushNamed(context, '/courses');
+      }
     );
   }
 
@@ -130,7 +200,7 @@ class _HomePageState extends State<HomePage> {
       child: ListView(
         children: [
           const SizedBox(height: 16),
-          _bodyTitle(),
+          _welcomeTextTitle(),
           const SizedBox(height: 16),
           const HomeStatsGrid(),
           const SizedBox(height: 50),
@@ -145,7 +215,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // body title
-  Widget _bodyTitle() {
+  Widget _welcomeTextTitle() {
     return Padding(
       padding: const EdgeInsets.only(left: 12),
       child: const Text(

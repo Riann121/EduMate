@@ -1,5 +1,8 @@
 import 'package:edumate/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:edumate/courses/utility/assignment_item.dart';
+import 'package:edumate/courses/utility/assignment_tile.dart';
+
 
 class CourseTemplatePage extends StatelessWidget {
   final String courseName;
@@ -61,7 +64,7 @@ class CourseTemplatePage extends StatelessWidget {
 
               // =================Assignment section=================
               _titleText("Upcoming Assignments"),
-              ...assignments.map((a) => _assignmentCard(a)),
+              ...assignments.map((a) => AssignmentCard(assignment: a)),
 
               const SizedBox(height: 20),
 
@@ -87,26 +90,8 @@ class CourseTemplatePage extends StatelessWidget {
       ),
     );
   }
-//cards for assignments
-  Widget _assignmentCard(AssignmentItem assignment) {
-    return Card(
-      color: Color(0xFFF4F7FF),
-      elevation: 0.5,
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        leading: const Icon(Icons.assignment, color: Colors.black),
-        title: Text(
-          assignment.title,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text("Due: ${assignment.dueDate}"),
-        trailing: Text(
-          assignment.status,
-          style: const TextStyle(fontSize: 12),
-        ),
-      ),
-    );
-  }
+
+
 //cards for lectures
   Widget _lectureCard(LectureItem lecture) {
     return Card(
@@ -125,17 +110,6 @@ class CourseTemplatePage extends StatelessWidget {
   }
 }
 
-class AssignmentItem {
-  final String title;
-  final String dueDate;
-  final String status;
-
-  const AssignmentItem({
-    required this.title,
-    required this.dueDate,
-    required this.status,
-  });
-}
 
 class LectureItem {
   final String title;

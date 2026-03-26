@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Edumate',
+      title: 'EduMate',
       theme: AppTheme().AppThemeData(),
       home: const HomePage(),
       routes: {

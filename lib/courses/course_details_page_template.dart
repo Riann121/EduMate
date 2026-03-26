@@ -1,5 +1,6 @@
 import 'package:edumate/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:edumate/courses/utility/assignment_item.dart';
 
 class CourseTemplatePage extends StatelessWidget {
   final String courseName;
@@ -125,17 +126,6 @@ class CourseTemplatePage extends StatelessWidget {
   }
 }
 
-class AssignmentItem {
-  final String title;
-  final String dueDate;
-  final String status;
-
-  const AssignmentItem({
-    required this.title,
-    required this.dueDate,
-    required this.status,
-  });
-}
 
 class LectureItem {
   final String title;

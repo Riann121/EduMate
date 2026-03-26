@@ -4,6 +4,8 @@ import 'package:edumate/theme/app_theme.dart';
 import 'package:edumate/home_page/home_page.dart';
 import 'package:edumate/routine/routine_page.dart';
 import 'package:edumate/tasks/task_page.dart';
+import 'package:edumate/login&registration/login_page/login_page.dart';
+import 'package:edumate/login&registration/registration_page/registration_page.dart';
 
 void main() {
   runApp(const MyApp());

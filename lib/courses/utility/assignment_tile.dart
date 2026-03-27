@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:edumate/courses/utility/assignment_item.dart';
+
 class AssignmentCard extends StatelessWidget {
   final AssignmentItem assignment;
+  final VoidCallback? onTap;
 
   const AssignmentCard({
     super.key,
     required this.assignment,
+    this.onTap,
   });
 
   @override
@@ -15,6 +18,7 @@ class AssignmentCard extends StatelessWidget {
       elevation: 0.5,
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
+        onTap: onTap,
         leading: const Icon(Icons.assignment, color: Colors.black),
         title: Text(
           assignment.title,
@@ -22,7 +26,7 @@ class AssignmentCard extends StatelessWidget {
         ),
         subtitle: Text("Due: ${assignment.dueDate}"),
         trailing: Text(
-          assignment.status,
+          'Pending',
           style: const TextStyle(fontSize: 12),
         ),
       ),

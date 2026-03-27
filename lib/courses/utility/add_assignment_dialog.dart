@@ -21,6 +21,7 @@ Future<void> showAddAssignmentDialog({
                 controller: titleController,
                 decoration: const InputDecoration(
                   labelText: "Assignment Title",
+                  hintText: "Enter assignment title here...",
                 ),
               ),
               const SizedBox(height: 12),
@@ -29,14 +30,15 @@ Future<void> showAddAssignmentDialog({
                 readOnly: true,
                 decoration: const InputDecoration(
                   labelText: "Due Date",
+                  hintText: "Select due date",
                   suffixIcon: Icon(Icons.calendar_today),
                 ),
                 onTap: () async {
                   DateTime? pickedDate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime(2030),
                   );
 
                   if (pickedDate != null) {
@@ -49,7 +51,13 @@ Future<void> showAddAssignmentDialog({
               const SizedBox(height: 12),
               TextField(
                 controller: detailsController,
-                decoration: const InputDecoration(labelText: "Details"),
+                decoration: const InputDecoration(
+                  labelText: "Details",
+                  hintText: "Enter assignment details here...",
+                  alignLabelWithHint: true,
+                ),
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
               ),
             ],
           ),
@@ -69,7 +77,7 @@ Future<void> showAddAssignmentDialog({
               final newAssignment = AssignmentItem(
                 title: titleController.text,
                 dueDate: dueDateController.text,
-                status: detailsController.text,
+                details: detailsController.text,
               );
 
               onAdd(newAssignment);

@@ -84,7 +84,20 @@ class _CourseTemplatePageState extends State<CourseTemplatePage> {
           ),
         ),
       ),
-
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showAddAssignmentDialog(
+            context: context,
+            onAdd: (newAssignment) {
+              setState(() {
+                assignments.add(newAssignment);
+              });
+            },
+          );
+        },
+        backgroundColor: Colors.black,
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
     );
   }
 

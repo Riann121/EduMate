@@ -2,9 +2,9 @@ import 'package:edumate/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:edumate/courses/utility/assignment_item.dart';
 import 'package:edumate/courses/utility/assignment_tile.dart';
+import 'package:edumate/courses/utility/add_assignment_dialog.dart';
 
-
-class CourseTemplatePage extends StatelessWidget {
+class CourseTemplatePage extends StatefulWidget {
   final String courseName;
   final String instructorName;
   final String overview;
@@ -21,6 +21,19 @@ class CourseTemplatePage extends StatelessWidget {
   });
 
   @override
+  State<CourseTemplatePage> createState() => _CourseTemplatePageState();
+}
+
+class _CourseTemplatePageState extends State<CourseTemplatePage> {
+  late List<AssignmentItem> assignments;
+
+  @override
+  void initState() {
+    super.initState();
+    assignments = List.from(widget.assignments);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
@@ -29,7 +42,7 @@ class CourseTemplatePage extends StatelessWidget {
         leading: const BackButton(color: Colors.white),
         centerTitle: true,
         title: Text(
-          courseName,
+          widget.courseName,
           style: const TextStyle(
             fontWeight: FontWeight.w900,
             color: Colors.white,
@@ -42,7 +55,6 @@ class CourseTemplatePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-
               // =================Overview section=================
               _titleText("Overview"),
               Card(
@@ -51,11 +63,8 @@ class CourseTemplatePage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    overview,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      height: 1.5,
-                    ),
+                    widget.overview,
+                    style: const TextStyle(fontSize: 14, height: 1.5),
                   ),
                 ),
               ),
@@ -70,29 +79,27 @@ class CourseTemplatePage extends StatelessWidget {
 
               // =================Lectures section=================
               _titleText("Due lectures"),
-              ...lectures.map((l) => _lectureCard(l)),
+              ...widget.lectures.map((l) => _lectureCard(l)),
             ],
           ),
         ),
       ),
+
     );
   }
-//text widget to display title
+
+  //text widget to display title
   Widget _titleText(String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Text(
         title,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
     );
   }
 
-
-//cards for lectures
+  //cards for lectures
   Widget _lectureCard(LectureItem lecture) {
     return Card(
       color: Color(0xFFF4F7FF),
@@ -110,13 +117,9 @@ class CourseTemplatePage extends StatelessWidget {
   }
 }
 
-
 class LectureItem {
   final String title;
   final String date;
 
-  const LectureItem({
-    required this.title,
-    required this.date,
-  });
+  const LectureItem({required this.title, required this.date});
 }

@@ -18,7 +18,7 @@ class DataStructures extends StatelessWidget {
         AssignmentItem(
           title: 'Stack',
           dueDate: '22/2/2026',
-          status: 'pending',
+          details: '###',
         ),
       ],
 

@@ -18,12 +18,12 @@ class Electronics extends StatelessWidget {
         AssignmentItem(
           title: 'Diode Circuit Analysis',
           dueDate: '22/2/2026',
-          status: 'Submitted',
+          details: '###',
         ),
         AssignmentItem(
           title: 'Transistor Biasing',
           dueDate: '22/2/2026',
-          status: 'Pending',
+          details: '###',
         ),
       ],
 

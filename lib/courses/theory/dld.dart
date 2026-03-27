@@ -18,7 +18,7 @@ class DLD extends StatelessWidget {
         AssignmentItem(
           title: 'Multiplexers',
           dueDate: '22/2/2026',
-          status: 'pending',
+          details: '###',
         ),
       ],
 

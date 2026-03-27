@@ -18,7 +18,7 @@ class DLDLab extends StatelessWidget {
         AssignmentItem(
           title: 'Design BCD adder',
           dueDate: '22/2/2026',
-          status: 'pending',
+          details: '###',
         ),
       ],
 

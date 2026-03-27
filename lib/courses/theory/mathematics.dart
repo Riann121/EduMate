@@ -17,7 +17,7 @@ class Mathematics extends StatelessWidget {
         AssignmentItem(
           title: 'Laplace transform',
           dueDate: '22/2/2026',
-          status: 'pending',
+          details: '###',
         ),
       ],
 

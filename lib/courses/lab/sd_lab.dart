@@ -18,7 +18,7 @@ class SoftwareDevelopmentLab extends StatelessWidget {
         AssignmentItem(
           title: 'UI Submission',
           dueDate: '23/2/2026',
-          status: 'pending',
+          details: '###',
         ),
       ],
 

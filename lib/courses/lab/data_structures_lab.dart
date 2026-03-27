@@ -17,7 +17,7 @@ class DataStructuresLab extends StatelessWidget {
         AssignmentItem(
           title: 'Doubly linked list',
           dueDate: '22/2/2026',
-          status: 'pending',
+          details: '###',
         ),
       ],
 

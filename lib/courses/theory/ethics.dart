@@ -17,7 +17,7 @@ class Ethics extends StatelessWidget {
         AssignmentItem(
           title: 'Ethics for engineers',
           dueDate: '22/2/2026',
-          status: 'pending',
+          details: '###',
         ),
       ],
 

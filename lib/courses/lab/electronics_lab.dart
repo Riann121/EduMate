@@ -18,7 +18,7 @@ class ElectronicsLab extends StatelessWidget {
         AssignmentItem(
           title: 'BJT Transistors',
           dueDate: '22/2/2026',
-          status: 'pending',
+          details: '###',
         ),
       ],
 

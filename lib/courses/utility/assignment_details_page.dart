@@ -40,10 +40,10 @@ void showAssignmentDetails({
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // DOING BUTTON — just closes bottom sheet
+                    // DOING BUTTON
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context); // ✅ just close
+                        Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -54,7 +54,7 @@ void showAssignmentDetails({
                       ),
                     ),
 
-                    // FINISHED BUTTON — remove assignment as before
+                    // FINISHED BUTTON
                     ElevatedButton(
                       onPressed: () {
                         onDelete(); // remove from list

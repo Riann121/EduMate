@@ -75,22 +75,23 @@ class _CourseTemplatePageState extends State<CourseTemplatePage> {
               // =================Assignment section=================
               _titleText("Upcoming Assignments"),
               ...assignments.map((a) => AssignmentCard(
-                assignment: a,
-                onTap: () {
-                  showAssignmentDetails(
-                    context: context,
-                    assignment: a,
-                    onUpdate: () {
-                      setState(() {});
-                    },
-                    onDelete: () {
-                      setState(() {
-                        assignments.remove(a);
-                      });
-                    },
-                  );
-                },
-              )),
+                  assignment: a,
+                  onTap: () {
+                    showAssignmentDetails(
+                      context: context,
+                      assignment: a,
+                      onUpdate: () {
+                        setState(() {});
+                      },
+                      onDelete: () {
+                        setState(() {
+                          assignments.remove(a);
+                        });
+                      },
+                    );
+                  },
+                ),
+              ),
 
               const SizedBox(height: 20),
 

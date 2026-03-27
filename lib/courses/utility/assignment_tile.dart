@@ -5,11 +5,7 @@ class AssignmentCard extends StatelessWidget {
   final AssignmentItem assignment;
   final VoidCallback? onTap;
 
-  const AssignmentCard({
-    super.key,
-    required this.assignment,
-    this.onTap,
-  });
+  const AssignmentCard({super.key, required this.assignment, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +21,7 @@ class AssignmentCard extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         subtitle: Text("Due: ${assignment.dueDate}"),
-        trailing: Text(
-          'Pending',
-          style: const TextStyle(fontSize: 12),
-        ),
+        trailing: Text('Pending', style: const TextStyle(fontSize: 12)),
       ),
     );
   }

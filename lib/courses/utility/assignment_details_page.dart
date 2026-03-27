@@ -46,12 +46,9 @@ void showAssignmentDetails({
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Colors.black,
                       ),
-                      child: const Text(
-                        "Doing",
-                        style: TextStyle(color: Colors.black),
-                      ),
+                      child: const Text("Due"),
                     ),
 
                     // FINISHED BUTTON

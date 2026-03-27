@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:edumate/courses/utility/assignment_item.dart';
 import 'package:edumate/courses/utility/assignment_tile.dart';
 import 'package:edumate/courses/utility/add_assignment_dialog.dart';
+import 'package:edumate/courses/utility/assignment_details_page.dart';
 
 class CourseTemplatePage extends StatefulWidget {
   final String courseName;
@@ -73,7 +74,23 @@ class _CourseTemplatePageState extends State<CourseTemplatePage> {
 
               // =================Assignment section=================
               _titleText("Upcoming Assignments"),
-              ...assignments.map((a) => AssignmentCard(assignment: a)),
+              ...assignments.map((a) => AssignmentCard(
+                assignment: a,
+                onTap: () {
+                  showAssignmentDetails(
+                    context: context,
+                    assignment: a,
+                    onUpdate: () {
+                      setState(() {});
+                    },
+                    onDelete: () {
+                      setState(() {
+                        assignments.remove(a);
+                      });
+                    },
+                  );
+                },
+              )),
 
               const SizedBox(height: 20),
 

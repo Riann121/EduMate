@@ -6,8 +6,15 @@ import 'package:edumate/routine/routine_page.dart';
 import 'package:edumate/tasks/task_page.dart';
 import 'package:edumate/login&registration/login_page/login_page.dart';
 import 'package:edumate/login&registration/registration_page/registration_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

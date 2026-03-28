@@ -10,7 +10,7 @@ class AssignmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color(0xFFF4F7FF),
+      color: const Color(0xFFEFEFEF),
       elevation: 0.5,
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:edumate/home_page/widgets/home_stats_grid.dart';
 import 'package:edumate/home_page/widgets/upcoming_exams_section.dart';
-import 'package:edumate/home_page/widgets/weekly_submissions_section.dart';
 import 'package:edumate/tasks/widgets/edit_task_dialog.dart';
 import 'package:edumate/tasks/widgets/task_item.dart';
 import 'package:edumate/tasks/widgets/task_tile.dart';
+import 'package:edumate/courses/utility/assignment_item.dart';
+import 'package:edumate/courses/utility/assignment_tile.dart';
+import 'package:edumate/courses/utility/assignment_details_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final List<TaskItem> _todayTasks;
+  late final List<AssignmentItem> _upcomingAssignments;
 
   @override
   void initState() {
@@ -23,6 +26,9 @@ class _HomePageState extends State<HomePage> {
     _todayTasks = buildDummyTaskItems()
         .where((task) => DateUtils.isSameDay(task.dueDate, DateTime.now()))
         .toList();
+
+    //fetching this week's exams
+    _upcomingAssignments = buildDummyAssignmentItems();
   }
 
   @override
@@ -208,7 +214,7 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 25),
           const UpcomingExamsSection(),
           const SizedBox(height: 25),
-          const WeeklySubmissionsSection(),
+          _weeklySubmissionsSection(),
         ],
       ),
     );
@@ -323,5 +329,45 @@ class _HomePageState extends State<HomePage> {
         _todayTasks.removeAt(index);
       }
     });
+  }
+
+  // ----------- Upcoming assignment section -------------
+  Widget _weeklySubmissionsSection() {
+    // Fetching the dummy data
+    final weeklyAssignments = buildDummyAssignmentItems();
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 18, 14, 12),
+      decoration: _sectionBoxDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Weekly Submissions",
+            style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w800
+            ),
+          ),
+          const SizedBox(height: 18),
+          if (weeklyAssignments.isEmpty)
+            const Text("No submissions due this week")
+          else
+            ...weeklyAssignments.map((assignment) => AssignmentCard(
+              assignment: assignment,
+              onTap: () => showAssignmentDetails(
+                context: context,
+                assignment: assignment,
+                onUpdate: () => setState(() {}), // Refresh UI on update
+                onDelete: () {
+                  setState(() {
+                    // Logic to remove from your data source would go here
+                  });
+                },
+              ),
+            )),
+        ],
+      ),
+    );
   }
 }

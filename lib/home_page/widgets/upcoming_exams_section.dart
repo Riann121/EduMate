@@ -77,6 +77,7 @@ class _UpcomingExamsSectionState extends State<UpcomingExamsSection> {
       padding: const EdgeInsets.only(bottom: 8),
       child: Card(
         color: const Color(0xFFEFEFEF),
+        elevation: 0.5,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () => _showExamDetailsDialog(index),

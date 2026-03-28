@@ -14,29 +14,35 @@ List<TaskItem> buildDummyTaskItems() {
   final now = DateTime.now();
   return [
     TaskItem(
-      title: 'Complete DBMS assignment',
-      detail: 'CS-302',
-      dueDate: now.add(const Duration(days: 1)),
-    ),
-    TaskItem(
-      title: 'Revise calculus chapter 5',
-      detail: 'MTH-201',
+      title: 'DLD Assignment',
+      detail: 'Complete chapter 5 exercises',
       dueDate: now,
     ),
     TaskItem(
-      title: 'Submit networking lab report',
-      detail: 'CSE-218',
-      dueDate: now.add(const Duration(days: 2)),
+      title: 'DS Assignment',
+      detail: 'Complete Binary Search Tree',
+      dueDate: now,
     ),
     TaskItem(
-      title: 'Prepare AI quiz notes',
-      detail: 'CSE-340',
+      title: 'Math Assignment',
+      detail: 'Complete chapter 5 exercises',
+      dueDate: now.add(const Duration(days: 1)),
+    ),
+    TaskItem(
+      title: 'Submit EduMate Draft',
+      detail: 'Push the latest Dart changes to GitHub',
       dueDate: now.add(const Duration(days: 3)),
     ),
+
     TaskItem(
-      title: 'Team meeting for mini project',
-      detail: 'Project Group B',
+      title: 'Biology Report',
+      detail: 'Research DNA replication',
       dueDate: now.add(const Duration(days: 4)),
+    ),
+    TaskItem(
+      title: 'History Essay',
+      detail: 'Industrial Revolution topic',
+      dueDate: now.add(const Duration(days: 5)),
     ),
   ];
 }

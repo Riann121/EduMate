@@ -133,7 +133,7 @@ class _CourseTemplatePageState extends State<CourseTemplatePage> {
   //cards for lectures
   Widget _lectureCard(LectureItem lecture) {
     return Card(
-      color: Color(0xFFF4F7FF),
+      color: Color(0xFFEFEFEF),
       elevation: 0.5,
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(

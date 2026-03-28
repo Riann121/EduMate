@@ -27,7 +27,10 @@ class _RegisterPageState extends State<RegisterPage> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: eduBlack),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => {
+            Navigator.pop(context), // Go back to Login
+            Navigator.pushNamed(context, '/login'),
+          }
         ),
       ),
       body: SingleChildScrollView(

@@ -23,6 +23,7 @@ class TaskTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: const Color(0xFFEFEFEF),
+      elevation: 0.5,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),

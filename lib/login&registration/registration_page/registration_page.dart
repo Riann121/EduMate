@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -59,11 +60,23 @@ class _RegisterPageState extends State<RegisterPage> {
               _inputField(_confirmPasswordController, "••••••••", Icons.lock_reset_outlined, isPassword: true),
 
               const SizedBox(height: 40),
-              _actionButton("Register", () {
-                // Logic to create account
-                //create account
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/home');
+              //firebase auth register
+              _actionButton("Register", () async {
+                try {
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                    email: _emailController.text.trim(),
+                    password: _passwordController.text.trim(),
+                  );
+                  // Success: Go to home
+                  Navigator.pushReplacementNamed(context, '/home');
+                } on FirebaseAuthException catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(e.message ?? "Registration Failed"),
+                      backgroundColor: Colors.redAccent,
+                    ),
+                  );
+                }
               }, eduBlack, Colors.white),
 
               const SizedBox(height: 20),

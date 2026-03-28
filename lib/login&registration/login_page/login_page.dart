@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -47,11 +48,23 @@ class _LoginPageState extends State<LoginPage> {
               // ),
 
               const SizedBox(height: 30),
-              _actionButton("Login", () {
-                // Navigate to Dashboard or Routine
-                //logic to authenticate
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/home');
+              //login via firebase auth
+              _actionButton("Login", () async {
+                try {
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: _emailController.text.trim(),
+                    password: _passwordController.text.trim(),
+                  );
+                  // Success: Go to home
+                  Navigator.pushReplacementNamed(context, '/home');
+                } on FirebaseAuthException catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(e.message ?? "Login Failed"),
+                      backgroundColor: Colors.redAccent,
+                    ),
+                  );
+                }
               }, eduBlack, Colors.white),
 
               const SizedBox(height: 20),

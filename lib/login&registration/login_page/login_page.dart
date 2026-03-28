@@ -38,17 +38,20 @@ class _LoginPageState extends State<LoginPage> {
               _inputLabel("Password"),
               _inputField(_passwordController, "Enter your password", Icons.lock_outline, isPassword: true),
 
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text("Forgot Password?", style: TextStyle(color: eduAccent)),
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.centerRight,
+              //   child: TextButton(
+              //     onPressed: () {},
+              //     child: const Text("Forgot Password?", style: TextStyle(color: eduAccent)),
+              //   ),
+              // ),
 
               const SizedBox(height: 30),
               _actionButton("Login", () {
                 // Navigate to Dashboard or Routine
+                //logic to authenticate
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/home');
               }, eduBlack, Colors.white),
 
               const SizedBox(height: 20),
@@ -59,6 +62,8 @@ class _LoginPageState extends State<LoginPage> {
                   GestureDetector(
                     onTap: () {
                       // Navigate to RegisterPage
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/register');
                     },
                     child: const Text("Register", style: TextStyle(color: eduAccent, fontWeight: FontWeight.bold)),
                   ),

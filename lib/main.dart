@@ -21,11 +21,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'EduMate',
       theme: AppTheme().AppThemeData(),
-      home: const HomePage(),
+      home: const LoginPage(),
       routes: {
         '/courses': (context) => const CoursesPage(),
         '/routine': (context) => const RoutinePage(),
         '/tasks': (context) => const TaskPage(),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => const RegisterPage(),
+        '/home': (context) => const HomePage(),
       },
     );
   }

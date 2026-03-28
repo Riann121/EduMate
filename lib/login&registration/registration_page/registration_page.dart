@@ -58,6 +58,9 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 40),
               _actionButton("Register", () {
                 // Logic to create account
+                //create account
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/home');
               }, eduBlack, Colors.white),
 
               const SizedBox(height: 20),
@@ -68,6 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context); // Go back to Login
+                      Navigator.pushNamed(context, '/login');
                     },
                     child: const Text("Login",
                         style: TextStyle(color: eduAccent, fontWeight: FontWeight.bold)),

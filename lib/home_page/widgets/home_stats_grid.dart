@@ -19,7 +19,7 @@ class HomeStatsGrid extends StatelessWidget {
     return _HomeStatsLayout(
       horizontalPadding: isNarrow ? 8.0 : 12.0,
       cardSpacing: isNarrow ? 8.0 : 12.0,
-      cardHeight: isNarrow ? 85.0 : 93.0,
+      cardHeight: isNarrow ? 113.0 : 93.0,
     );
   }
 

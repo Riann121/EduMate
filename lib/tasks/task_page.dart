@@ -155,12 +155,13 @@ class _TaskPageState extends State<TaskPage> {
   }
 
   Future<void> _onTaskTileTapped(TaskItem task) async {
+    // update data
     final updatedTask = await showEditTaskDialog(
       context,
       initialTask: task,
     );
 
-    if (updatedTask != null) {
+    if (updatedTask != null && mounted) {
       await FirebaseFirestore.instance.collection('tasks').doc(task.id).update({
         'title': updatedTask.title,
         'detail': updatedTask.detail,

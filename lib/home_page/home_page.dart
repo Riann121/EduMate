@@ -18,16 +18,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final List<TaskItem> _todayTasks;
   late final List<AssignmentItem> _upcomingAssignments;
 
   @override
   void initState() {
     super.initState();
-    //fetching today's tasks
-    _todayTasks = buildDummyTaskItems()
-        .where((task) => DateUtils.isSameDay(task.dueDate, DateTime.now()))
-        .toList();
 
     //fetching this week's exams
     _upcomingAssignments = buildDummyAssignmentItems();
@@ -264,36 +259,44 @@ class _HomePageState extends State<HomePage> {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              // Today tasks fetching
-              final todayDocs = snapshot.data?.docs.where((doc) {
+              // today tasks fetch
+              final List<TaskItem> todayTasks = snapshot.data!.docs.where((doc) {
                 final date = (doc['dueDate'] as Timestamp).toDate();
                 return DateUtils.isSameDay(date, DateTime.now());
-              }).toList() ?? [];
+              }).map((doc) {
+                final data = doc.data() as Map<String, dynamic>;
+                return TaskItem(
+                  id: doc.id, // CRITICAL: Pass the Firestore ID here
+                  title: data['title'] ?? '',
+                  detail: data['detail'],
+                  dueDate: (data['dueDate'] as Timestamp).toDate(),
+                  isCompleted: data['isCompleted'] ?? false,
+                );
+              }).toList();
 
-              if (todayDocs.isEmpty) {
+              if (todayTasks.isEmpty) {
                 return _todayTasksEmptyState();
               }
 
-              return Column(
-                children: todayDocs.map((doc) {
-                  final data = doc.data() as Map<String, dynamic>;
+
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: todayTasks.length,
+                itemBuilder: (context, index) {
+                  final task = todayTasks[index];
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: TaskTile(
-                      title: data['title'],
-                      detail: data['detail'],
-                      dueDate: (data['dueDate'] as Timestamp).toDate(),
-                      isCompleted: data['isCompleted'] ?? false,
-                      onChanged: (val) {
-                        //completed
-                        doc.reference.update({'isCompleted': val});
-                      },
-                      onTap: () {
-                        //edit
-                      },
+                      title: task.title,
+                      detail: task.detail,
+                      dueDate: task.dueDate,
+                      isCompleted: task.isCompleted,
+                      onTap: () => _onTodayTaskTileTapped(task), // edit hover
+                      onChanged: (value) => _onTodayTaskChecked(task, value), // update
                     ),
                   );
-                }).toList(),
+                },
               );
             },
           ),
@@ -321,19 +324,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> _todayTasksContent() {
-    if (_todayTasks.isEmpty) {
-      return [_todayTasksEmptyState()];
-    }
-
-    return _todayTasks
-        .asMap()
-        .entries
-        .map((entry) {
-          return _todayTaskTile(index: entry.key, task: entry.value);
-        })
-        .toList(growable: false);
-  }
 
   Widget _todayTasksEmptyState() {
     return const Padding(
@@ -345,45 +335,30 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _todayTaskTile({required int index, required TaskItem task}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: TaskTile(
-        title: task.title,
-        detail: task.detail,
-        dueDate: task.dueDate,
-        isCompleted: false,
-        onTap: () => _onTodayTaskTileTapped(index),
-        onChanged: (value) => _onTodayTaskChecked(value, index),
-      ),
-    );
+
+  void _onTodayTaskChecked(TaskItem task, bool? value) {
+    // update data
+    FirebaseFirestore.instance
+        .collection('tasks')
+        .doc(task.id)
+        .update({'isCompleted': value});
   }
 
-  void _onTodayTaskChecked(bool? value, int index) {
-    if (value == true) {
-      setState(() {
-        _todayTasks.removeAt(index);
-      });
-    }
-  }
-
-  Future<void> _onTodayTaskTileTapped(int index) async {
+  Future<void> _onTodayTaskTileTapped(TaskItem task) async {
+    //edit data
     final updatedTask = await showEditTaskDialog(
       context,
-      initialTask: _todayTasks[index],
+      initialTask: task,
     );
 
-    if (updatedTask == null || !mounted) {
-      return;
+    if (updatedTask != null && mounted) {
+      // update task
+      await FirebaseFirestore.instance.collection('tasks').doc(task.id).update({
+        'title': updatedTask.title,
+        'detail': updatedTask.detail,
+        'dueDate': updatedTask.dueDate,
+      });
     }
-
-    setState(() {
-      if (DateUtils.isSameDay(updatedTask.dueDate, DateTime.now())) {
-        _todayTasks[index] = updatedTask;
-      } else {
-        _todayTasks.removeAt(index);
-      }
-    });
   }
 
   // ----------- Upcoming assignment section -------------

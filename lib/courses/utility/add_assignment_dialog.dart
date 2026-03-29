@@ -8,6 +8,7 @@ Future<void> showAddAssignmentDialog({
   final titleController = TextEditingController();
   final dueDateController = TextEditingController();
   final detailsController = TextEditingController();
+  DateTime? selectedDate;
 
   await showDialog(
     context: context,
@@ -34,17 +35,21 @@ Future<void> showAddAssignmentDialog({
                   suffixIcon: Icon(Icons.calendar_today),
                 ),
                 onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
+                  final pickedDate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
-                    firstDate: DateTime(2020),
+                    firstDate: DateTime.now(),
                     lastDate: DateTime(2030),
                   );
 
                   if (pickedDate != null) {
-                    String formattedDate =
-                        "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
-                    dueDateController.text = formattedDate;
+                    selectedDate = pickedDate;
+
+                    dueDateController.text = formatDate(pickedDate);
+
+                    // String formattedDate =
+                    // "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                    // dueDateController.text = formattedDate;
                   }
                 },
               ),
@@ -69,14 +74,13 @@ Future<void> showAddAssignmentDialog({
           ),
           ElevatedButton(
             onPressed: () {
-              if (titleController.text.isEmpty ||
-                  dueDateController.text.isEmpty) {
+              if (titleController.text.isEmpty || selectedDate == null) {
                 return;
               }
 
               final newAssignment = AssignmentItem(
                 title: titleController.text,
-                dueDate: dueDateController.text,
+                dueDate: selectedDate!,
                 details: detailsController.text,
               );
 

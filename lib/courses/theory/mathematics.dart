@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:edumate/courses//course_details_page_template.dart';
+import 'package:edumate/courses/course_details_page_template.dart';
 import 'package:edumate/courses/utility/assignment_item.dart';
 
 class Mathematics extends StatelessWidget {
@@ -13,10 +13,10 @@ class Mathematics extends StatelessWidget {
       overview:
       'This is the beginning of Mathematics course...',
 
-      assignments: const [
+      assignments:  [
         AssignmentItem(
           title: 'Laplace transform',
-          dueDate: '22/2/2026',
+          dueDate: DateTime(2026,3,30),
           details: '###',
         ),
       ],

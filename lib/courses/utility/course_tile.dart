@@ -17,7 +17,7 @@ class CourseTile extends StatelessWidget {
     onTap: onTap,
     borderRadius: BorderRadius.circular(8),
     child: Card(
-      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      color: Color(0xFFEFEFEF),
       elevation: 1.5,
       margin: const EdgeInsets.only(bottom: 10),
       shape:

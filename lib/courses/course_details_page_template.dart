@@ -1,3 +1,6 @@
+import 'package:edumate/courses/utility/lecture_tile.dart';
+import 'package:edumate/courses/utility/lecture_details_page.dart';
+import 'package:edumate/courses/utility/lecture_item.dart';
 import 'package:edumate/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:edumate/courses/utility/assignment_item.dart';
@@ -27,11 +30,13 @@ class CourseTemplatePage extends StatefulWidget {
 
 class _CourseTemplatePageState extends State<CourseTemplatePage> {
   late List<AssignmentItem> assignments;
+  late List<LectureItem> lectures;
 
   @override
   void initState() {
     super.initState();
     assignments = List.from(widget.assignments);
+    lectures = List.from(widget.lectures);
   }
 
   @override
@@ -74,42 +79,57 @@ class _CourseTemplatePageState extends State<CourseTemplatePage> {
 
               // =================Assignment section=================
               _titleText("Upcoming Assignments"),
-              ...assignments.map((a) => AssignmentCard(
-                  assignment: a,
-                  onTap: () {
-                    showAssignmentDetails(
-                      context: context,
+              ...assignments.map(
+                    (a) =>
+                    AssignmentCard(
                       assignment: a,
-                      onUpdate: () {
-                        setState(() {});
+                      onTap: () {
+                        showAssignmentDetails(
+                          context: context,
+                          assignment: a,
+                          onUpdate: () {
+                            setState(() {});
+                          },
+                          onDelete: () {
+                            setState(() {
+                              assignments.remove(a);
+                            });
+                          },
+                        );
                       },
-                      onDelete: () {
-                        setState(() {
-                          assignments.remove(a);
-                        });
-                      },
-                    );
-                  },
-                ),
+                    ),
               ),
 
               const SizedBox(height: 20),
 
               // =================Lectures section=================
-              _titleText("Due lectures"),
-              ...widget.lectures.map((l) => _lectureCard(l)),
+              _titleText("Upcoming Lectures"),
+              ...lectures.map(
+                    (l) =>
+                    LectureCard(
+                      lecture: l,
+                      onTap: () {
+                        showLectureDetails(
+                          context: context,
+                          lecture: l,
+                          onDelete: () => setState(() => lectures.remove(l)),
+                        );
+                      },
+                    ),
+              ),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showAddAssignmentDialog(
+          showAddItemDialog(
             context: context,
-            onAdd: (newAssignment) {
-              setState(() {
-                assignments.add(newAssignment);
-              });
+            onAddAssignment: (assignment) {
+              setState(() => assignments.add(assignment));
+            },
+            onAddLecture: (lecture) {
+              setState(() => lectures.add(lecture));
             },
           );
         },
@@ -129,28 +149,4 @@ class _CourseTemplatePageState extends State<CourseTemplatePage> {
       ),
     );
   }
-
-  //cards for lectures
-  Widget _lectureCard(LectureItem lecture) {
-    return Card(
-      color: Color(0xFFEFEFEF),
-      elevation: 0.5,
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        leading: const Icon(Icons.library_books_outlined, color: Colors.black),
-        title: Text(
-          lecture.title,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(formatDate(lecture.date)),
-      ),
-    );
-  }
-}
-
-class LectureItem {
-  final String title;
-  final DateTime date;
-
-  const LectureItem({required this.title, required this.date});
 }

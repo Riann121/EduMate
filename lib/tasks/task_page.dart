@@ -145,13 +145,16 @@ class _TaskPageState extends State<TaskPage> {
   Future<void> _onAddTaskPressed() async {
     final newTask = await showAddTaskDialog(context);
 
-    if (newTask == null || !mounted) {
-      return;
+    if (newTask != null) {
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      await FirebaseFirestore.instance.collection('tasks').add({
+        'userId': userId,
+        'title': newTask.title,
+        'detail': newTask.detail,
+        'dueDate': newTask.dueDate,
+        'isCompleted': false,
+      });
     }
-
-    setState(() {
-      _tasks.add(newTask);
-    });
   }
 
   Future<void> _onTaskTileTapped(TaskItem task) async {

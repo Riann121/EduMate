@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edumate/home_page/widgets/home_stats_grid.dart';
 import 'package:edumate/home_page/widgets/upcoming_exams_section.dart';
@@ -57,6 +58,15 @@ class _HomePageState extends State<HomePage> {
         style: TextStyle(fontWeight: FontWeight.w900),
       ),
       centerTitle: true,
+      actions: [
+        IconButton(
+          onPressed: () async {
+            await FirebaseAuth.instance.signOut();
+            Navigator.pushReplacementNamed(context, '/login');
+          },
+          icon: Icon(Icons.logout)
+        )
+      ],
     );
   }
 

@@ -5,7 +5,7 @@ import 'package:edumate/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:edumate/courses/utility/assignment_item.dart';
 import 'package:edumate/courses/utility/assignment_tile.dart';
-import 'package:edumate/courses/utility/add_assignment_dialog.dart';
+import 'package:edumate/courses/utility/add_item_dialog.dart';
 import 'package:edumate/courses/utility/assignment_details_page.dart';
 
 class CourseTemplatePage extends StatefulWidget {
@@ -80,24 +80,23 @@ class _CourseTemplatePageState extends State<CourseTemplatePage> {
               // =================Assignment section=================
               _titleText("Upcoming Assignments"),
               ...assignments.map(
-                    (a) =>
-                    AssignmentCard(
+                (a) => AssignmentCard(
+                  assignment: a,
+                  onTap: () {
+                    showAssignmentDetails(
+                      context: context,
                       assignment: a,
-                      onTap: () {
-                        showAssignmentDetails(
-                          context: context,
-                          assignment: a,
-                          onUpdate: () {
-                            setState(() {});
-                          },
-                          onDelete: () {
-                            setState(() {
-                              assignments.remove(a);
-                            });
-                          },
-                        );
+                      onUpdate: () {
+                        setState(() {});
                       },
-                    ),
+                      onDelete: () {
+                        setState(() {
+                          assignments.remove(a);
+                        });
+                      },
+                    );
+                  },
+                ),
               ),
 
               const SizedBox(height: 20),
@@ -105,17 +104,16 @@ class _CourseTemplatePageState extends State<CourseTemplatePage> {
               // =================Lectures section=================
               _titleText("Upcoming Lectures"),
               ...lectures.map(
-                    (l) =>
-                    LectureCard(
+                (l) => LectureCard(
+                  lecture: l,
+                  onTap: () {
+                    showLectureDetails(
+                      context: context,
                       lecture: l,
-                      onTap: () {
-                        showLectureDetails(
-                          context: context,
-                          lecture: l,
-                          onDelete: () => setState(() => lectures.remove(l)),
-                        );
-                      },
-                    ),
+                      onDelete: () => setState(() => lectures.remove(l)),
+                    );
+                  },
+                ),
               ),
             ],
           ),

@@ -60,7 +60,7 @@ void showAssignmentDetails({
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                       ),
-                      child: const Text("Finished"),
+                      child: const Text("Complete"),
                     ),
                   ],
                 ),

@@ -6,11 +6,7 @@ class CourseTile extends StatelessWidget {
   final CourseItem course;
   final VoidCallback onTap;
 
-  const CourseTile({
-    super.key,
-    required this.course,
-    required this.onTap,
-  });
+  const CourseTile({super.key, required this.course, required this.onTap});
 
   @override
   Widget build(BuildContext context) => InkWell(
@@ -20,11 +16,9 @@ class CourseTile extends StatelessWidget {
       color: Color(0xFFEFEFEF),
       elevation: 1.5,
       margin: const EdgeInsets.only(bottom: 10),
-      shape:
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
-        padding:
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
             Expanded(
@@ -58,11 +52,7 @@ class CourseTile extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
-              Icons.menu_book_outlined,
-              size: 22,
-              color: Colors.black,
-            ),
+            const Icon(Icons.menu_book_outlined, size: 22, color: Colors.black),
           ],
         ),
       ),

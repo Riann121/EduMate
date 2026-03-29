@@ -41,7 +41,7 @@ void showLectureDetails({
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                   ),
-                  child: const Text("Pending"),
+                  child: const Text("Due"),
                 ),
 
                 // FINISHED BUTTON
@@ -53,7 +53,7 @@ void showLectureDetails({
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                   ),
-                  child: const Text("Finished"),
+                  child: const Text("Complete"),
                 ),
               ],
             ),

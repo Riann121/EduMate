@@ -72,8 +72,7 @@ class _AddItemDialogState extends State<_AddItemDialog> {
             TextField(
               controller: titleController,
               decoration: InputDecoration(
-                labelText:
-                isAssignment ? "Assignment Title" : "Lecture Title",
+                labelText: isAssignment ? "Assignment Title" : "Lecture Title",
               ),
             ),
 
@@ -107,15 +106,13 @@ class _AddItemDialogState extends State<_AddItemDialog> {
             if (isAssignment)
               TextField(
                 controller: detailsController,
-                decoration: const InputDecoration(
-                  labelText: "Details",
-                ),
+                decoration: const InputDecoration(labelText: "Details"),
                 maxLines: null,
               ),
 
             if (isAssignment) const SizedBox(height: 12),
 
-            //Type Selection (moved to bottom)
+            //Type Selection
             RadioGroup<bool>(
               groupValue: isAssignment,
               onChanged: (value) {
@@ -139,16 +136,12 @@ class _AddItemDialogState extends State<_AddItemDialog> {
         ),
       ),
 
-
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
           child: const Text("Cancel"),
         ),
-        ElevatedButton(
-          onPressed: _handleAdd,
-          child: const Text("Add"),
-        ),
+        ElevatedButton(onPressed: _handleAdd, child: const Text("Add")),
       ],
     );
   }
@@ -156,9 +149,7 @@ class _AddItemDialogState extends State<_AddItemDialog> {
   void _handleAdd() {
     if (titleController.text.isEmpty || selectedDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fill in all required fields"),
-        ),
+        const SnackBar(content: Text("Please fill in all required fields")),
       );
       return;
     }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edumate/home_page/widgets/home_stats_grid.dart';
@@ -243,6 +244,8 @@ class _HomePageState extends State<HomePage> {
 
   // Today's tasks section with title and list of tasks or empty state
   Widget _todayTasksSection() {
+    final String? userId = FirebaseAuth.instance.currentUser?.uid;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 18, 14, 12),
       decoration: _sectionBoxDecoration(),
@@ -251,7 +254,49 @@ class _HomePageState extends State<HomePage> {
         children: [
           _todayTasksTitle(),
           const SizedBox(height: 18),
-          ..._todayTasksContent(), //spreads the list of widgets into the children of the column
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('tasks')
+                .where('userId', isEqualTo: userId)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              // Today tasks fetching
+              final todayDocs = snapshot.data?.docs.where((doc) {
+                final date = (doc['dueDate'] as Timestamp).toDate();
+                return DateUtils.isSameDay(date, DateTime.now());
+              }).toList() ?? [];
+
+              if (todayDocs.isEmpty) {
+                return _todayTasksEmptyState();
+              }
+
+              return Column(
+                children: todayDocs.map((doc) {
+                  final data = doc.data() as Map<String, dynamic>;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: TaskTile(
+                      title: data['title'],
+                      detail: data['detail'],
+                      dueDate: (data['dueDate'] as Timestamp).toDate(),
+                      isCompleted: data['isCompleted'] ?? false,
+                      onChanged: (val) {
+                        //completed
+                        doc.reference.update({'isCompleted': val});
+                      },
+                      onTap: () {
+                        //edit
+                      },
+                    ),
+                  );
+                }).toList(),
+              );
+            },
+          ),
         ],
       ),
     );

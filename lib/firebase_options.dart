@@ -59,4 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'edumate-5cff9',
     storageBucket: 'edumate-5cff9.firebasestorage.app',
   );
+
 }

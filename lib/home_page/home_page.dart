@@ -266,7 +266,7 @@ class _HomePageState extends State<HomePage> {
               }).map((doc) {
                 final data = doc.data() as Map<String, dynamic>;
                 return TaskItem(
-                  id: doc.id, // CRITICAL: Pass the Firestore ID here
+                  id: doc.id,
                   title: data['title'] ?? '',
                   detail: data['detail'],
                   dueDate: (data['dueDate'] as Timestamp).toDate(),

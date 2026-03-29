@@ -20,9 +20,15 @@ class DataStructures extends StatelessWidget {
         ),
       ],
 
-      lectures: const [
-        LectureItem(title: 'Tree', date: '22/2/2026'),
-        LectureItem(title: 'Graph', date: '22/2/2026'),
+      lectures: [
+        LectureItem(
+            title: 'Tree',
+            date: DateTime(2026, 2, 20)
+        ),
+        LectureItem(
+            title: 'Graph',
+            date: DateTime(2026, 3, 31)
+        ),
       ],
     );
   }

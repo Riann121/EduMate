@@ -20,7 +20,7 @@ class Ethics extends StatelessWidget {
         ),
       ],
 
-      lectures: const [LectureItem(title: 'Ethics', date: '22/2/2026')],
+      lectures: [LectureItem(title: 'Ethics', date: DateTime(2026, 2, 20))],
     );
   }
 }

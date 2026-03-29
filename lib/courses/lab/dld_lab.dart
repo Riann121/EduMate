@@ -20,7 +20,12 @@ class DLDLab extends StatelessWidget {
         ),
       ],
 
-      lectures: const [],
+      lectures: [
+        LectureItem(
+            title: 'LAB Material 1',
+            date: DateTime(2026, 2, 20)
+        )
+      ],
     );
   }
 }

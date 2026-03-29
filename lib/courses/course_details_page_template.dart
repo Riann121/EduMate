@@ -142,7 +142,7 @@ class _CourseTemplatePageState extends State<CourseTemplatePage> {
           lecture.title,
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        subtitle: Text(lecture.date),
+        subtitle: Text(formatDate(lecture.date)),
       ),
     );
   }
@@ -150,7 +150,7 @@ class _CourseTemplatePageState extends State<CourseTemplatePage> {
 
 class LectureItem {
   final String title;
-  final String date;
+  final DateTime date;
 
   const LectureItem({required this.title, required this.date});
 }

@@ -26,10 +26,19 @@ class Electronics extends StatelessWidget {
         ),
       ],
 
-      lectures: const [
-        LectureItem(title: 'Introduction to Electronics', date: '22/2/2026'),
-        LectureItem(title: 'PN Junction Diode', date: '22/2/2026'),
-        LectureItem(title: 'Transistors', date: '5/2/2026'),
+      lectures: [
+        LectureItem(
+          title: 'Introduction to Electronics',
+          date: DateTime(2026, 4, 1),
+        ),
+        LectureItem(
+            title: 'Diode Circuit Analysis',
+            date: DateTime(2026, 4, 0)
+        ),
+        LectureItem(
+            title: 'PN Junction Diode',
+            date: DateTime(2026, 4, 0)
+        ),
       ],
     );
   }

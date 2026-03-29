@@ -20,9 +20,15 @@ class SoftwareDevelopmentLab extends StatelessWidget {
         ),
       ],
 
-      lectures: const [
-        LectureItem(title: 'LAB Material 2', date: '22/2/2026'),
-        LectureItem(title: 'LAB Material 1', date: '22/2/2026'),
+      lectures: [
+        LectureItem(
+            title: 'LAB Material 2',
+            date: DateTime(2026, 2, 20)
+        ),
+        LectureItem(
+            title: 'LAB Material 1',
+            date: DateTime(2026, 3, 31)
+        ),
       ],
     );
   }

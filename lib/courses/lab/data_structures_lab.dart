@@ -20,9 +20,9 @@ class DataStructuresLab extends StatelessWidget {
         ),
       ],
 
-      lectures: const [
-        LectureItem(title: 'Singly Linked List', date: '22/2/2026'),
-        LectureItem(title: 'Doubly Linked List', date: '22/2/2026'),
+      lectures: [
+        LectureItem(title: 'Singly Linked List', date: DateTime(2026, 2, 20)),
+        LectureItem(title: 'Doubly Linked List', date: DateTime(2026, 3, 31)),
       ],
     );
   }

@@ -20,9 +20,15 @@ class DLD extends StatelessWidget {
         ),
       ],
 
-      lectures: const [
-        LectureItem(title: 'Multiplexers', date: '22/2/2026'),
-        LectureItem(title: 'Combinational Circuits', date: '22/2/2026'),
+      lectures: [
+        LectureItem(
+            title: 'Multiplexers',
+            date: DateTime(2026, 2, 20)
+        ),
+        LectureItem(
+          title: 'Combinational Circuits',
+          date: DateTime(2026, 3, 31),
+        ),
       ],
     );
   }

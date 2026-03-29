@@ -293,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                       dueDate: task.dueDate,
                       isCompleted: task.isCompleted,
                       onTap: () => _onTodayTaskTileTapped(task), // edit hover
-                      onChanged: (value) => _onTodayTaskChecked(task, value), // update
+                      onChanged: (value) => _deleteTodayTask(task, value), // update
                     ),
                   );
                 },
@@ -334,15 +334,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-
-  void _onTodayTaskChecked(TaskItem task, bool? value) {
-    // update data
-    FirebaseFirestore.instance
-        .collection('tasks')
-        .doc(task.id)
-        .update({'isCompleted': value});
-  }
+  
 
   Future<void> _onTodayTaskTileTapped(TaskItem task) async {
     //edit data
@@ -358,6 +350,21 @@ class _HomePageState extends State<HomePage> {
         'detail': updatedTask.detail,
         'dueDate': updatedTask.dueDate,
       });
+    }
+  }
+
+  Future<void> _deleteTodayTask(TaskItem task, bool? value) async {
+    if (value == true) {
+      // delete
+      FirebaseFirestore.instance
+          .collection('tasks')
+          .doc(task.id)
+          .delete();
+
+      // show a message to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Task Completed & Deleted")),
+      );
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edumate/tasks/widgets/task_item.dart';
 import 'package:flutter/material.dart';
 
@@ -50,6 +51,19 @@ class _EditTaskDialogState extends State<_EditTaskDialog> {
       title: Text('Edit Task'),
       content: _buildDialogContent(),
       actions: [
+        TextButton(
+          onPressed: () async {
+            await FirebaseFirestore.instance
+                .collection('tasks')
+                .doc(widget.initialTask.id)
+                .delete();
+            Navigator.of(context).pop();
+          },
+          child: const Text(
+            'Delete',
+            style: TextStyle(color: Colors.red)
+          ),
+        ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text('Cancel')

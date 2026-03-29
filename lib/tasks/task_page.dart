@@ -121,10 +121,7 @@ class _TaskPageState extends State<TaskPage> {
                 dueDate: task.dueDate,
                 isCompleted: task.isCompleted,
                 onTap: () => _onTaskTileTapped(task), // Pass the task object directly
-                onChanged: (value) {
-                  // UPDATE: Change completion status in Firebase
-                  docs[index].reference.update({'isCompleted': value});
-                },
+                onChanged: (value) => _deleteTask(task, value),
               ),
             );
           },
@@ -170,6 +167,21 @@ class _TaskPageState extends State<TaskPage> {
         'detail': updatedTask.detail,
         'dueDate': updatedTask.dueDate,
       });
+    }
+  }
+
+  Future<void> _deleteTask(TaskItem task, bool? value) async {
+    if (value == true) {
+      // delete
+      FirebaseFirestore.instance
+          .collection('tasks')
+          .doc(task.id)
+          .delete();
+
+      // show a message to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Task Completed & Deleted")),
+      );
     }
   }
 }

@@ -30,7 +30,7 @@ void showAssignmentDetails({
                 ),
                 const SizedBox(height: 10),
 
-                Text("Deadline: ${assignment.dueDate}"),
+                Text("Deadline: ${formatDate(assignment.dueDate)}"),
                 const SizedBox(height: 10),
                 Text("Details:"),
                 const SizedBox(height: 10),

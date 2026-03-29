@@ -101,7 +101,7 @@ Future<void> showAddCustomCourseDialog({
   );
 
   // dispose controllers
-  courseNameController.dispose();
-  instructorController.dispose();
-  overviewController.dispose();
+  // courseNameController.dispose();
+  // instructorController.dispose();
+  // overviewController.dispose();
 }

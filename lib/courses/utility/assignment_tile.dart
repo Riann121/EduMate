@@ -20,7 +20,7 @@ class AssignmentCard extends StatelessWidget {
           assignment.title,
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        subtitle: Text("Due: ${assignment.dueDate}"),
+        subtitle: Text("Due: ${formatDate(assignment.dueDate)}"),
         trailing: Text('Pending', style: const TextStyle(fontSize: 12)),
       ),
     );

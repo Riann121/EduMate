@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:edumate/courses//course_details_page_template.dart';
+import 'package:edumate/courses/course_details_page_template.dart';
 import 'package:edumate/courses/utility/assignment_item.dart';
 
 class Electronics extends StatelessWidget {
   const Electronics({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -12,33 +11,33 @@ class Electronics extends StatelessWidget {
       courseName: 'Electronics',
       instructorName: 'SJ Hamim',
       overview:
-      'This course introduces semiconductor devices, diodes, transistors, and circuit analysis.',
+          'This course introduces semiconductor devices, diodes, transistors, and circuit analysis.',
 
-      assignments: const [
+      assignments: [
         AssignmentItem(
           title: 'Diode Circuit Analysis',
-          dueDate: '22/2/2026',
+          dueDate: DateTime(2026, 3, 30),
           details: '###',
         ),
         AssignmentItem(
           title: 'Transistor Biasing',
-          dueDate: '22/2/2026',
+          dueDate: DateTime(2026, 3, 30),
           details: '###',
         ),
       ],
 
-      lectures: const [
+      lectures: [
         LectureItem(
           title: 'Introduction to Electronics',
-          date: '22/2/2026',
+          date: DateTime(2026, 4, 1),
         ),
         LectureItem(
-          title: 'PN Junction Diode',
-          date: '22/2/2026',
+            title: 'Diode Circuit Analysis',
+            date: DateTime(2026, 4, 0)
         ),
         LectureItem(
-          title: 'Transistors',
-          date: '5/2/2026',
+            title: 'PN Junction Diode',
+            date: DateTime(2026, 4, 0)
         ),
       ],
     );

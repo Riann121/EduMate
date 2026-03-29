@@ -59,7 +59,10 @@ class _EditTaskDialogState extends State<_EditTaskDialog> {
                 .delete();
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Task Deleted")),
+              const SnackBar(
+                content: Text("Task Deleted"),
+                backgroundColor: Colors.redAccent,
+              ),
             );
           },
           child: const Text(

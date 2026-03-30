@@ -275,7 +275,10 @@ class _HomePageState extends State<HomePage> {
 
       // show a message to user
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Task Completed & Deleted")),
+        const SnackBar(
+          content: Text("Task Completed & Removed"),
+          backgroundColor: Colors.lightGreen,
+        ),
       );
     }
   }

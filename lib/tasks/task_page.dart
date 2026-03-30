@@ -144,7 +144,7 @@ class _TaskPageState extends State<TaskPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Task Completed & Removed"),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.lightGreen,
         ),
       );
     }

@@ -32,6 +32,12 @@ class _TaskPageState extends State<TaskPage> {
     return AppBar(
       title: const Text('Tasks', style: TextStyle(fontWeight: FontWeight.w900)),
       centerTitle: true,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.delete_sweep, color: Colors.red),
+          onPressed: () => _showDeleteConfirmation(context),
+        ),
+      ],
     );
   }
 
@@ -125,21 +131,58 @@ class _TaskPageState extends State<TaskPage> {
     }
   }
 
-  Future<void> _deleteTask(TaskItem task, bool? value) async {
-    if (value == true) {
-      // delete
-      FirebaseFirestore.instance
-          .collection('tasks')
-          .doc(task.id)
-          .delete();
-
-      // show a message to user
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Deleted"),
-          backgroundColor: Colors.lightGreen,
-        ),
-      );
-    }
+  void _showDeleteConfirmation(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Wrap content height
+            children: [
+              const Text(
+                "Clear Completed Tasks?",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                "This will permanently delete all tasks that has been completed",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Cancel"),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        // _deleteAllIncompleteTasks();
+                      },
+                      child: const Text("Delete All"),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

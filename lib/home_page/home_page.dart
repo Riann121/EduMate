@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edumate/tasks/Funtionalities/task_functionalities.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edumate/home_page/widgets/home_stats_grid.dart';
 import 'package:edumate/home_page/widgets/upcoming_exams_section.dart';
-import 'package:edumate/tasks/widgets/edit_task_dialog.dart';
+import 'package:edumate/tasks/utility/edit_task_dialog.dart';
 import 'package:edumate/tasks/widgets/task_item.dart';
 import 'package:edumate/tasks/widgets/task_tile.dart';
+import 'package:edumate/tasks/task_page.dart';
 import 'package:edumate/courses/utility/assignment_item.dart';
 import 'package:edumate/courses/utility/assignment_tile.dart';
 import 'package:edumate/courses/utility/assignment_details_page.dart';
@@ -19,6 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final List<AssignmentItem> _upcomingAssignments;
+  TaskFunctionalities taskFunc = TaskFunctionalities();
 
   @override
   void initState() {
@@ -205,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                       dueDate: task.dueDate,
                       isCompleted: task.isCompleted,
                       onTap: () => _onTodayTaskTileTapped(task), // edit hover
-                      onChanged: (value) => _deleteTodayTask(task, value), // update
+                      onChanged: (value) => taskFunc.onTaskChecked(task, value), // update
                     ),
                   );
                 },

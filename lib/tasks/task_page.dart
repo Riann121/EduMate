@@ -1,5 +1,6 @@
-import 'package:edumate/tasks/widgets/add_task_dialog.dart';
-import 'package:edumate/tasks/widgets/edit_task_dialog.dart';
+import 'package:edumate/tasks/Funtionalities/task_functionalities.dart';
+import 'package:edumate/tasks/utility/add_task_dialog.dart';
+import 'package:edumate/tasks/utility/edit_task_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edumate/tasks/widgets/task_item.dart';
@@ -14,6 +15,9 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
+  final String? userId = FirebaseAuth.instance.currentUser?.uid;
+  TaskFunctionalities func = TaskFunctionalities();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +26,7 @@ class _TaskPageState extends State<TaskPage> {
       floatingActionButton: _addTaskButton(),
     );
   }
+
 
   AppBar _taskPageAppBar() {
     return AppBar(
@@ -32,7 +37,6 @@ class _TaskPageState extends State<TaskPage> {
 
 
   Widget _taskListBody() {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
 
     return StreamBuilder<QuerySnapshot>(
       // Fetch only tasks belonging to THIS user
@@ -83,7 +87,7 @@ class _TaskPageState extends State<TaskPage> {
                 dueDate: task.dueDate,
                 isCompleted: task.isCompleted,
                 onTap: () => _onTaskTileTapped(task), // Pass the task object directly
-                onChanged: (value) => _deleteTask(task, value),
+                onChanged: (value) => func.onTaskChecked(task, value),
               ),
             );
           },
@@ -105,14 +109,7 @@ class _TaskPageState extends State<TaskPage> {
     final newTask = await showAddTaskDialog(context);
 
     if (newTask != null) {
-      final userId = FirebaseAuth.instance.currentUser?.uid;
-      await FirebaseFirestore.instance.collection('tasks').add({
-        'userId': userId,
-        'title': newTask.title,
-        'detail': newTask.detail,
-        'dueDate': newTask.dueDate,
-        'isCompleted': false,
-      });
+      func.addTask(newTask, userId);
     }
   }
 
@@ -124,11 +121,7 @@ class _TaskPageState extends State<TaskPage> {
     );
 
     if (updatedTask != null && mounted) {
-      await FirebaseFirestore.instance.collection('tasks').doc(task.id).update({
-        'title': updatedTask.title,
-        'detail': updatedTask.detail,
-        'dueDate': updatedTask.dueDate,
-      });
+      func.updateTask(task, updatedTask);
     }
   }
 
@@ -143,7 +136,7 @@ class _TaskPageState extends State<TaskPage> {
       // show a message to user
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Task Completed & Removed"),
+          content: Text("Deleted"),
           backgroundColor: Colors.lightGreen,
         ),
       );

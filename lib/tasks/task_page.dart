@@ -171,7 +171,7 @@ class _TaskPageState extends State<TaskPage> {
                       ),
                       onPressed: () {
                         Navigator.pop(context);
-                        // _deleteAllIncompleteTasks();
+                        _deleteAllCompletedTasks();
                       },
                       child: const Text("Delete All"),
                     ),
@@ -184,5 +184,48 @@ class _TaskPageState extends State<TaskPage> {
         );
       },
     );
+  }
+
+  Future<void> _deleteAllCompletedTasks() async {
+    if (userId == null) return;
+
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('tasks')
+          .where('userId', isEqualTo: userId)
+          .where('isCompleted', isEqualTo: true)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("No Completed tasks to delete")),
+          );
+        }
+        return;
+      }
+
+      final batch = FirebaseFirestore.instance.batch();
+      for (var doc in querySnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+
+      await batch.commit();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Deleted all completed tasks"),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: $e"), backgroundColor: Colors.redAccent),
+        );
+      }
+    }
   }
 }

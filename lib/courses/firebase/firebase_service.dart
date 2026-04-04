@@ -4,30 +4,28 @@ class FirebaseService {
   static final _db = FirebaseFirestore.instance;
 
   /// Adds a course to Firestore only if it doesn't already exist
-  static Future<void> addCourse({
+  static Future<String> addCourse({
     required String name,
     required String instructor,
     required String overview,
     required bool isTheory,
   }) async {
-    // Check if a course with the same name already exists
     final existing = await _db
         .collection('courses')
         .where('name', isEqualTo: name)
         .get();
 
     if (existing.docs.isNotEmpty) {
-      return;      // Course already exists, do not add
+      return existing.docs.first.id; // Return existing ID
     }
 
-    // Add the course since it doesn't exist
-    await _db.collection('courses').add({
+    final docRef = await _db.collection('courses').add({
       'name': name,
       'instructor': instructor,
       'overview': overview,
       'isTheory': isTheory,
       'createdAt': Timestamp.now(),
     });
-    // print('Course "$name" added to Firebase successfully.');
-  }
-}
+
+    return docRef.id; // Return new document ID
+  }}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:edumate/courses/utility/course_item.dart';
 import 'package:edumate/courses/course_details_page_template.dart';
+import 'package:edumate/courses/firebase/firebase_service.dart';
 
 Future<void> showAddCustomCourseDialog({
   required BuildContext context,
@@ -13,9 +14,9 @@ Future<void> showAddCustomCourseDialog({
 
   await showDialog(
     context: context,
-    builder: (context) {
+    builder: (dialogContext) {
       return StatefulBuilder(
-        builder: (context, setState) {
+        builder: (builderContext, setState) {
           return AlertDialog(
             title: const Text('Add Course'),
             content: SingleChildScrollView(
@@ -43,7 +44,6 @@ Future<void> showAddCustomCourseDialog({
                     ),
                   ),
                   const SizedBox(height: 12),
-
                   RadioGroup<bool>(
                     groupValue: isTheory,
                     onChanged: (value) => setState(() => isTheory = value!),
@@ -63,33 +63,56 @@ Future<void> showAddCustomCourseDialog({
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.pop(dialogContext),
                 child: const Text('Cancel'),
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   final name = courseNameController.text.trim();
                   final instructor = instructorController.text.trim();
                   final overview = overviewController.text.trim();
+
+                  //Validate before async call
                   if (name.isEmpty || instructor.isEmpty || overview.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please fill in all fields'),
-                      ),
-                    );
+                    if (dialogContext.mounted) {
+                      ScaffoldMessenger.of(dialogContext).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fill in all fields'),
+                        ),
+                      );
+                    }
                     return;
                   }
 
-                  final page = CourseTemplatePage(
-                    courseName: name,
-                    instructorName: instructor,
-                    overview: overview,
-                    assignments: const [],
-                    lectures: const [],
-                  );
+                  try {
+                    // Perform async operation
+                    await FirebaseService.addCourse(
+                      name: name,
+                      instructor: instructor,
+                      overview: overview,
+                      isTheory: isTheory,
+                    );
 
-                  onAdd(CourseItem(name, instructor, page), isTheory);
-                  Navigator.pop(context);
+                    //Check if context is still valid after async
+                    if (!dialogContext.mounted) return;
+
+                    final page = CourseTemplatePage(
+                      courseName: name,
+                      instructorName: instructor,
+                      overview: overview,
+                      assignments: const [],
+                      lectures: const [],
+                    );
+
+                    onAdd(CourseItem(name, instructor, page), isTheory);
+                    Navigator.pop(dialogContext);
+                  } catch (e) {
+                    if (dialogContext.mounted) {
+                      ScaffoldMessenger.of(dialogContext).showSnackBar(
+                        SnackBar(content: Text('Error: $e')),
+                      );
+                    }
+                  }
                 },
                 child: const Text('Add'),
               ),

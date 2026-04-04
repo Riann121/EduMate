@@ -72,7 +72,7 @@ Future<void> showAddCustomCourseDialog({
                   final instructor = instructorController.text.trim();
                   final overview = overviewController.text.trim();
 
-                  //Validate before async call
+                  // Validate before async call
                   if (name.isEmpty || instructor.isEmpty || overview.isEmpty) {
                     if (dialogContext.mounted) {
                       ScaffoldMessenger.of(dialogContext).showSnackBar(
@@ -85,31 +85,45 @@ Future<void> showAddCustomCourseDialog({
                   }
 
                   try {
-                    // Perform async operation
-                    await FirebaseService.addCourse(
+                    // Perform async operation and get the courseId
+                    final courseId = await FirebaseService.addCourse(
                       name: name,
                       instructor: instructor,
                       overview: overview,
                       isTheory: isTheory,
                     );
 
-                    //Check if context is still valid after async
+                    // Check if context is still valid after async
                     if (!dialogContext.mounted) return;
 
-                    final page = CourseTemplatePage(
+                    // Create the page with the courseId
+                    final page = CourseDetailPage(
+                      courseId: courseId,
                       courseName: name,
                       instructorName: instructor,
                       overview: overview,
-                      assignments: const [],
-                      lectures: const [],
+                      courseCode: '',
                     );
 
                     onAdd(CourseItem(name, instructor, page), isTheory);
                     Navigator.pop(dialogContext);
+
+                    // Show success message
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Course added successfully!'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
                   } catch (e) {
                     if (dialogContext.mounted) {
                       ScaffoldMessenger.of(dialogContext).showSnackBar(
-                        SnackBar(content: Text('Error: $e')),
+                        SnackBar(
+                          content: Text('Error: $e'),
+                          backgroundColor: Colors.red,
+                        ),
                       );
                     }
                   }

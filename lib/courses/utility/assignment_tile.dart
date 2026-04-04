@@ -4,8 +4,14 @@ import 'package:edumate/courses/utility/assignment_item.dart';
 class AssignmentCard extends StatelessWidget {
   final AssignmentItem assignment;
   final VoidCallback? onTap;
+  final VoidCallback? onDelete;
 
-  const AssignmentCard({super.key, required this.assignment, this.onTap});
+  const AssignmentCard({
+    super.key,
+    required this.assignment,
+    this.onTap,
+    this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +27,7 @@ class AssignmentCard extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         subtitle: Text("Due: ${formatDate(assignment.dueDate)}"),
-        trailing: Text('Pending', style: const TextStyle(fontSize: 12)),
+        trailing: const Text('Pending', style: TextStyle(fontSize: 12)),
       ),
     );
   }

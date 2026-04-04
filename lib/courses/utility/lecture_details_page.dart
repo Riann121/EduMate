@@ -33,7 +33,7 @@ void showLectureDetails({
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // DOING BUTTON
+                // DUE BUTTON
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
@@ -44,11 +44,11 @@ void showLectureDetails({
                   child: const Text("Due"),
                 ),
 
-                // FINISHED BUTTON
+                // COMPLETE BUTTON
                 ElevatedButton(
                   onPressed: () {
-                    onDelete(); // remove lecture
                     Navigator.pop(context);
+                    onDelete(); // remove lecture after closing modal
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,

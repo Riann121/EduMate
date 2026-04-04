@@ -48,12 +48,12 @@ class _CoursesPageState extends State<CoursesPage> {
               final course = CourseItem(
                 data['name'],
                 data['instructor'],
-                CourseTemplatePage(
+                CourseDetailPage(
+                  courseId: doc.id,
                   courseName: data['name'],
                   instructorName: data['instructor'],
                   overview: data['overview'],
-                  assignments: const [],
-                  lectures: const [],
+                  courseCode: '',
                 ),
               );
 
@@ -99,10 +99,9 @@ class _CoursesPageState extends State<CoursesPage> {
               await FirebaseService.addCourse(
                 name: newCourse.courseName,
                 instructor: newCourse.teacherName,
-                overview: (newCourse.page as CourseTemplatePage).overview,
+                overview: (newCourse.page as CourseDetailPage).overview,
                 isTheory: isTheory,
               );
-              // No need to call setState(), StreamBuilder updates automatically
             },
           );
         },

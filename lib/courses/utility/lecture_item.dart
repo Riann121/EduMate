@@ -1,6 +1,11 @@
 class LectureItem {
+  final String id;
   final String title;
   final DateTime date;
 
-  const LectureItem({required this.title, required this.date});
+  LectureItem({
+    required this.id,
+    required this.title,
+    required this.date,
+  });
 }

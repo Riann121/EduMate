@@ -5,8 +5,14 @@ import 'package:edumate/courses/utility/lecture_item.dart';
 class LectureCard extends StatelessWidget {
   final LectureItem lecture;
   final VoidCallback? onTap;
+  final VoidCallback? onDelete;
 
-  const LectureCard({super.key, required this.lecture, this.onTap});
+  const LectureCard({
+    super.key,
+    required this.lecture,
+    this.onTap,
+    this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +21,7 @@ class LectureCard extends StatelessWidget {
       elevation: 0.5,
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
-        onTap:
-            onTap ??
-            () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    "Lecture: ${lecture.title}\nDate: ${formatDate(lecture.date)}",
-                  ),
-                ),
-              );
-            },
+        onTap: onTap,
         leading: const Icon(Icons.library_books_outlined, color: Colors.black),
         title: Text(
           lecture.title,

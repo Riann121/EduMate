@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:edumate/home_page/widgets/home_stat_card.dart';
+import 'package:edumate/services/local_storage_service.dart';
 
 class HomeStatsGrid extends StatelessWidget {
   const HomeStatsGrid({super.key});
@@ -24,66 +25,76 @@ class HomeStatsGrid extends StatelessWidget {
   }
 
   Widget _gridContent(_HomeStatsLayout layout) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: layout.horizontalPadding,
-        vertical: 12,
-      ),
-      child: Column(
-        children: [
-          _taskExams(layout),
-          SizedBox(height: layout.cardSpacing),
-          _assignmentReports(layout),
-        ],
-      ),
-    );
-  }
+    final storage = LocalStorageService();
 
-  Widget _taskExams(_HomeStatsLayout layout) {
-    return SizedBox(
-      height: layout.cardHeight,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-        Expanded(
-            child: HomeStatCard(
-              title: 'Due Tasks',
-              value: '7',
-            ),
-          ),
-          SizedBox(width: layout.cardSpacing),
-          Expanded(
-            child: HomeStatCard(
-              title: 'Upcoming Exams',
-              value: '2',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+    return AnimatedBuilder(
+      animation: Listenable.merge([
+        storage.tasksListenable,
+        storage.assignmentsListenable,
+        storage.coursesListenable,
+        storage.examsListenable,
+      ]),
+      builder: (context, _) {
+        final dueTasks =
+            storage.getAllTasks().where((t) => !t.isCompleted).length;
+        final dueAssignments = storage.getAllAssignments().length;
+        final totalCourses = storage.getAllCourses().length;
+        final upcomingExams = storage.getUpcomingExamsThisWeek().length;
 
-  Widget _assignmentReports(_HomeStatsLayout layout) {
-    return SizedBox(
-      height: layout.cardHeight,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: HomeStatCard(
-              title: 'Due Assignments',
-              value: '6',
-            ),
+        return Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: layout.horizontalPadding,
+            vertical: 12,
           ),
-          SizedBox(width: layout.cardSpacing),
-          Expanded(
-            child: HomeStatCard(
-              title: 'Due Lab Reports',
-              value: '4',
-            ),
+          child: Column(
+            children: [
+              SizedBox(
+                height: layout.cardHeight,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: HomeStatCard(
+                        title: 'Due Tasks',
+                        value: '$dueTasks',
+                      ),
+                    ),
+                    SizedBox(width: layout.cardSpacing),
+                    Expanded(
+                      child: HomeStatCard(
+                        title: 'Upcoming Exams',
+                        value: '$upcomingExams',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: layout.cardSpacing),
+              SizedBox(
+                height: layout.cardHeight,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: HomeStatCard(
+                        title: 'Due Assignments',
+                        value: '$dueAssignments',
+                      ),
+                    ),
+                    SizedBox(width: layout.cardSpacing),
+                    Expanded(
+                      child: HomeStatCard(
+                        title: 'No. of Courses',
+                        value: '$totalCourses',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

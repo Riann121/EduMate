@@ -4,37 +4,30 @@ import 'package:edumate/theme/app_theme.dart';
 import 'package:edumate/home_page/home_page.dart';
 import 'package:edumate/routine/routine_page.dart';
 import 'package:edumate/tasks/task_page.dart';
-import 'package:edumate/login&registration/login_page/login_page.dart';
-import 'package:edumate/login&registration/registration_page/registration_page.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:edumate/exams/exams_page.dart';
+import 'package:edumate/services/local_storage_service.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await LocalStorageService().init();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your applgut ication.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'EduMate',
       theme: AppTheme().AppThemeData(),
-      home: const LoginPage(),
+      home: const HomePage(),
       routes: {
         '/courses': (context) => const CoursesPage(),
         '/routine': (context) => const RoutinePage(),
         '/tasks': (context) => const TaskPage(),
-        '/login': (context) => const LoginPage(),
-        '/register': (context) => const RegisterPage(),
+        '/exams': (context) => const ExamsPage(),
         '/home': (context) => const HomePage(),
       },
     );

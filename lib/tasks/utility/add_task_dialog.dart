@@ -18,7 +18,7 @@ class _AddTaskDialog extends StatefulWidget {
 class _AddTaskDialogState extends State<_AddTaskDialog> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _detailController = TextEditingController();
-  DateTime _selectedDate = DateTime.now(); //initialize to current date
+  DateTime _selectedDate = DateUtils.dateOnly(DateTime.now());
   String? _titleError;
 
   @override
@@ -145,12 +145,17 @@ class _AddTaskDialogState extends State<_AddTaskDialog> {
   }
 
   Future<void> _pickDate() async {
-    final now = DateTime.now();
+    final today = DateUtils.dateOnly(DateTime.now());
+    final lastDate = DateTime(today.year + 5);
+    final initialDate = _selectedDate.isBefore(today)
+        ? today
+        : (_selectedDate.isAfter(lastDate) ? lastDate : _selectedDate);
+
     final pickedDate = await showDatePicker(
-      firstDate: DateTime(now.year - 1),
-      lastDate: DateTime(now.year + 5),
       context: context,
-      initialDate: _selectedDate,
+      firstDate: today,
+      lastDate: lastDate,
+      initialDate: initialDate,
     );
 
     if (pickedDate == null) {

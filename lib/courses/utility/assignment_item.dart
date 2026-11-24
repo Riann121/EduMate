@@ -17,7 +17,6 @@ String formatDate(DateTime date) {
 }
 
 List<AssignmentItem> buildDummyAssignmentItems() {
-  final now = DateTime.now();
   return [
     AssignmentItem(
       title: 'Math Assignment',

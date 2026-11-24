@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edumate/services/local_storage_service.dart';
 import 'package:edumate/tasks/widgets/task_item.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +33,7 @@ class _EditTaskDialogState extends State<_EditTaskDialog> {
     super.initState();
     _titleController = TextEditingController(text: widget.initialTask.title);
     _detailController = TextEditingController(text: widget.initialTask.detail);
-    _selectedDate = widget.initialTask.dueDate;
+    _selectedDate = DateUtils.dateOnly(widget.initialTask.dueDate);
   }
 
   @override
@@ -53,17 +53,16 @@ class _EditTaskDialogState extends State<_EditTaskDialog> {
       actions: [
         TextButton(
           onPressed: () async {
-            await FirebaseFirestore.instance
-                .collection('tasks')
-                .doc(widget.initialTask.id)
-                .delete();
-            Navigator.of(context).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Task Deleted"),
-                backgroundColor: Colors.redAccent,
-              ),
-            );
+            await LocalStorageService().deleteTask(widget.initialTask.id);
+            if (context.mounted) {
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Task Deleted"),
+                  backgroundColor: Colors.redAccent,
+                ),
+              );
+            }
           },
           child: const Text(
             'Delete',
@@ -95,9 +94,11 @@ class _EditTaskDialogState extends State<_EditTaskDialog> {
 
     Navigator.of(context).pop(
         TaskItem(
+          id: widget.initialTask.id,
           title: title,
-          detail: detail.isEmpty ? null:detail,
+          detail: detail.isEmpty ? null : detail,
           dueDate: _selectedDate,
+          isCompleted: widget.initialTask.isCompleted,
         )
     );
   }
@@ -171,14 +172,18 @@ class _EditTaskDialogState extends State<_EditTaskDialog> {
   }
 
   Future<void> _pickDate() async {
-    final now = DateTime.now();
-    final pickedDate = await showDatePicker(
-      firstDate: DateTime(now.year - 1),
-      lastDate: DateTime(now.year + 5),
-      context: context,
-      initialDate: _selectedDate,
-    );
+    final today = DateUtils.dateOnly(DateTime.now());
+    final lastDate = DateTime(today.year + 5);
+    final initialDate = _selectedDate.isBefore(today)
+        ? today
+        : (_selectedDate.isAfter(lastDate) ? lastDate : _selectedDate);
 
+    final pickedDate = await showDatePicker(
+      context: context,
+      firstDate: today,
+      lastDate: lastDate,
+      initialDate: initialDate,
+    );
     if (pickedDate == null) {
       return;
     }

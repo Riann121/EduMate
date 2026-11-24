@@ -1,11 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:edumate/services/local_storage_service.dart';
 import 'package:edumate/tasks/Funtionalities/task_functionalities.dart';
 import 'package:edumate/tasks/utility/add_task_dialog.dart';
 import 'package:edumate/tasks/utility/edit_task_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:edumate/tasks/widgets/task_item.dart';
 import 'package:edumate/tasks/widgets/task_tile.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({super.key});
@@ -15,8 +14,8 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  final String? userId = FirebaseAuth.instance.currentUser?.uid;
-  TaskFunctionalities func = TaskFunctionalities();
+  final LocalStorageService _storage = LocalStorageService();
+  final TaskFunctionalities func = TaskFunctionalities();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,6 @@ class _TaskPageState extends State<TaskPage> {
       floatingActionButton: _addTaskButton(),
     );
   }
-
 
   AppBar _taskPageAppBar() {
     return AppBar(
@@ -41,50 +39,29 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 
-
   Widget _taskListBody() {
+    return ValueListenableBuilder(
+      valueListenable: _storage.tasksListenable,
+      builder: (context, box, child) {
+        final tasks = _storage.getAllTasks();
 
-    return StreamBuilder<QuerySnapshot>(
-      // Fetch only tasks belonging to THIS user
-      stream: FirebaseFirestore.instance
-          .collection('tasks')
-          .where('userId', isEqualTo: userId)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) return const Center(child: Text("Error loading tasks"));
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        final docs = snapshot.data!.docs;
-
-        if (docs.isEmpty) {
+        if (tasks.isEmpty) {
           return const Center(
             child: Text(
               'No Tasks Left!',
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.w700
-              )
-            )
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           );
         }
 
         return ListView.builder(
           padding: const EdgeInsets.all(16),
-          itemCount: docs.length,
+          itemCount: tasks.length,
           itemBuilder: (context, index) {
-            final data = docs[index].data() as Map<String, dynamic>;
-
-            // Firestore data -> TaskItem model
-            final task = TaskItem(
-              id: docs[index].id,
-              title: data['title'] ?? '',
-              detail: data['detail'],
-              dueDate: (data['dueDate'] as Timestamp).toDate(),
-              isCompleted: data['isCompleted'] ?? false,
-            );
-
+            final task = tasks[index];
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: TaskTile(
@@ -92,7 +69,7 @@ class _TaskPageState extends State<TaskPage> {
                 detail: task.detail,
                 dueDate: task.dueDate,
                 isCompleted: task.isCompleted,
-                onTap: () => _onTaskTileTapped(task), // Pass the task object directly
+                onTap: () => _onTaskTileTapped(task),
                 onChanged: (value) => func.onTaskChecked(task, value),
               ),
             );
@@ -102,7 +79,6 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 
-  //add button functionalities
   Widget _addTaskButton() {
     return FloatingActionButton(
       onPressed: _onAddTaskPressed,
@@ -113,21 +89,19 @@ class _TaskPageState extends State<TaskPage> {
 
   Future<void> _onAddTaskPressed() async {
     final newTask = await showAddTaskDialog(context);
-
     if (newTask != null) {
-      func.addTask(newTask, userId);
+      await func.addTask(newTask);
     }
   }
 
   Future<void> _onTaskTileTapped(TaskItem task) async {
-    // update data
     final updatedTask = await showEditTaskDialog(
       context,
       initialTask: task,
     );
 
     if (updatedTask != null && mounted) {
-      func.updateTask(task, updatedTask);
+      await func.updateTask(task, updatedTask);
     }
   }
 
@@ -141,7 +115,7 @@ class _TaskPageState extends State<TaskPage> {
         return Container(
           padding: const EdgeInsets.all(24),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // Wrap content height
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
                 "Clear Completed Tasks?",
@@ -149,7 +123,7 @@ class _TaskPageState extends State<TaskPage> {
               ),
               const SizedBox(height: 12),
               const Text(
-                "This will permanently delete all tasks that has been completed",
+                "This will permanently delete all tasks that have been completed.",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey),
               ),
@@ -187,45 +161,15 @@ class _TaskPageState extends State<TaskPage> {
   }
 
   Future<void> _deleteAllCompletedTasks() async {
-    if (userId == null) return;
+    await _storage.deleteAllCompletedTasks();
 
-    try {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('tasks')
-          .where('userId', isEqualTo: userId)
-          .where('isCompleted', isEqualTo: true)
-          .get();
-
-      if (querySnapshot.docs.isEmpty) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("No Completed tasks to delete")),
-          );
-        }
-        return;
-      }
-
-      final batch = FirebaseFirestore.instance.batch();
-      for (var doc in querySnapshot.docs) {
-        batch.delete(doc.reference);
-      }
-
-      await batch.commit();
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Deleted all completed tasks"),
-            backgroundColor: Colors.redAccent,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error: $e"), backgroundColor: Colors.redAccent),
-        );
-      }
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Deleted all completed tasks"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
   }
 }

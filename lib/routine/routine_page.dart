@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:edumate/services/local_storage_service.dart';
 
 import 'pages/setup_page.dart';
 import 'pages/grid_editor_page.dart';
@@ -14,6 +13,8 @@ class RoutinePage extends StatefulWidget {
 }
 
 class _RoutinePageState extends State<RoutinePage> {
+  final LocalStorageService _storage = LocalStorageService();
+
   // ---------------- STEP CONTROL ----------------
   int currentStep = 0;
   bool isLoading = true;
@@ -24,21 +25,11 @@ class _RoutinePageState extends State<RoutinePage> {
     _fetchRoutine();
   }
 
-  Future<void> _fetchRoutine() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      setState(() => isLoading = false);
-      return;
-    }
-
+  void _fetchRoutine() {
     try {
-      final doc = await FirebaseFirestore.instance
-          .collection('routines')
-          .doc(user.uid)
-          .get();
+      final data = _storage.getRoutine();
 
-      if (doc.exists) {
-        final data = doc.data() as Map<String, dynamic>;
+      if (data != null) {
         startTimeCtrl.text = data['startTime'] ?? "08:00";
         durationCtrl.text = data['duration'] ?? "60";
         numClassesCtrl.text = data['numClasses'] ?? "5";
@@ -62,19 +53,14 @@ class _RoutinePageState extends State<RoutinePage> {
   }
 
   Future<void> _saveRoutine() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
-
     try {
-      await FirebaseFirestore.instance.collection('routines').doc(user.uid).set({
-        'userId': user.uid,
-        'startTime': startTimeCtrl.text,
-        'duration': durationCtrl.text,
-        'numClasses': numClassesCtrl.text,
-        'numDays': numDaysCtrl.text,
-        'routineData': routineData,
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
+      await _storage.saveRoutine(
+        startTime: startTimeCtrl.text,
+        duration: durationCtrl.text,
+        numClasses: numClassesCtrl.text,
+        numDays: numDaysCtrl.text,
+        routineData: routineData,
+      );
     } catch (e) {
       debugPrint("Error saving routine: $e");
     }

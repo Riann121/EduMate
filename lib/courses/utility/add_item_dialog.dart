@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:edumate/services/local_storage_service.dart';
 
 Future<void> showAddItemDialog({
   required BuildContext context,
-  required String courseId, // Firestore doc ID of the course
+  required String courseId,
 }) async {
   await showDialog(
     context: context,
@@ -51,15 +51,12 @@ class _AddItemDialogState extends State<_AddItemDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Title
             TextField(
               controller: titleController,
               decoration: InputDecoration(
                   labelText: isAssignment ? "Assignment Title" : "Lecture Title"),
             ),
             const SizedBox(height: 12),
-
-            // Date
             TextField(
               controller: dateController,
               readOnly: true,
@@ -71,21 +68,19 @@ class _AddItemDialogState extends State<_AddItemDialog> {
                 final pickedDate = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime(2030),
+                  firstDate: DateTime.now().subtract(const Duration(days: 365)),
+                  lastDate: DateTime(2035),
                 );
                 if (pickedDate != null && mounted) {
                   setState(() {
                     selectedDate = pickedDate;
                     dateController.text =
-                    "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+                        "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
                   });
                 }
               },
             ),
             const SizedBox(height: 12),
-
-            // Details for assignments
             if (isAssignment)
               TextField(
                 controller: detailsController,
@@ -93,33 +88,37 @@ class _AddItemDialogState extends State<_AddItemDialog> {
                 maxLines: null,
               ),
             if (isAssignment) const SizedBox(height: 12),
-
-            // Type selection using RadioGroup
-            RadioGroup<bool>(
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    isAssignment = value;
-                    _clearFields();
-                  });
-                }
-              },
-              child: Row(
-                children: [
-                  const Text("Type: "),
-                  const SizedBox(width: 10),
-                  Radio<bool>(
-                    value: true,
-                    toggleable: isAssignment,
-                  ),
-                  const Text("Assignment"),
-                  Radio<bool>(
-                    value: false,
-                    toggleable: !isAssignment,
-                  ),
-                  const Text("Lecture"),
-                ],
-              ),
+            Row(
+              children: [
+                const Text("Type: "),
+                const SizedBox(width: 10),
+                Radio<bool>(
+                  value: true,
+                  groupValue: isAssignment,
+                  onChanged: (val) {
+                    if (val != null) {
+                      setState(() {
+                        isAssignment = val;
+                        _clearFields();
+                      });
+                    }
+                  },
+                ),
+                const Text("Assignment"),
+                Radio<bool>(
+                  value: false,
+                  groupValue: isAssignment,
+                  onChanged: (val) {
+                    if (val != null) {
+                      setState(() {
+                        isAssignment = val;
+                        _clearFields();
+                      });
+                    }
+                  },
+                ),
+                const Text("Lecture"),
+              ],
             ),
           ],
         ),
@@ -135,7 +134,7 @@ class _AddItemDialogState extends State<_AddItemDialog> {
   }
 
   Future<void> _handleAdd() async {
-    if (titleController.text.isEmpty || selectedDate == null) {
+    if (titleController.text.trim().isEmpty || selectedDate == null) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please fill in all required fields")),
@@ -144,31 +143,32 @@ class _AddItemDialogState extends State<_AddItemDialog> {
     }
 
     try {
-      final collectionName = isAssignment ? 'assignments' : 'lectures';
-      final docData = {
-        'title': titleController.text,
-        'date': Timestamp.fromDate(selectedDate!),
-      };
-
+      final storage = LocalStorageService();
       if (isAssignment) {
-        docData['details'] = detailsController.text;
+        await storage.addAssignment(
+          courseId: widget.courseId,
+          title: titleController.text.trim(),
+          date: selectedDate!,
+          details: detailsController.text.trim(),
+        );
+      } else {
+        await storage.addLecture(
+          courseId: widget.courseId,
+          title: titleController.text.trim(),
+          date: selectedDate!,
+        );
       }
-
-      await FirebaseFirestore.instance
-          .collection('courses')
-          .doc(widget.courseId)
-          .collection(collectionName)
-          .add(docData);
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(
-                "${isAssignment ? "Assignment" : "Lecture"} added successfully")),
+          content: Text(
+            "${isAssignment ? "Assignment" : "Lecture"} added successfully",
+          ),
+        ),
       );
 
-      if (!mounted) return;
       Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;

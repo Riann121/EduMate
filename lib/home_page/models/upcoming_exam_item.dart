@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-
 class UpcomingExamItem {
+  final String id;
   final String examTitle;
   final String courseName;
   final String syllabus;
   final DateTime examDate;
 
   const UpcomingExamItem({
+    this.id = '',
     required this.examTitle,
     required this.courseName,
     required this.syllabus,
@@ -14,48 +14,38 @@ class UpcomingExamItem {
   });
 
   UpcomingExamItem copyWith({
+    String? id,
     String? examTitle,
     String? courseName,
     String? syllabus,
+    DateTime? examDate,
   }) {
     return UpcomingExamItem(
+      id: id ?? this.id,
       examTitle: examTitle ?? this.examTitle,
       courseName: courseName ?? this.courseName,
       syllabus: syllabus ?? this.syllabus,
-      examDate: examDate,
+      examDate: examDate ?? this.examDate,
     );
   }
-}
 
-List<UpcomingExamItem> buildDummyUpcomingExamItems() {
-  final today = DateUtils.dateOnly(DateTime.now());
-  final weekEnd = today.add(const Duration(days: 6));
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'examTitle': examTitle,
+        'courseName': courseName,
+        'syllabus': syllabus,
+        'examDate': examDate.toIso8601String(),
+      };
 
-  final items = [
-    UpcomingExamItem(
-      examTitle: 'Quiz',
-      courseName: 'Laplace Transforms',
-      syllabus: 'Differential equations, Laplace transform properties, and inverse transforms',
-      examDate: today.add(const Duration(days: 1)),
-    ),
-    UpcomingExamItem(
-      examTitle: 'Mid Term',
-      courseName: 'Data Structures',
-      syllabus: 'Data structures, recursion, and algorithm analysis',
-      examDate: today.add(const Duration(days: 3)),
-    ),
-    UpcomingExamItem(
-      examTitle: 'Viva',
-      courseName: 'Digital Logic Design',
-      syllabus: 'Boolean algebra, logic gates, and combinational circuits',
-      examDate: today.add(const Duration(days: 4)),
-    ),
-  ];
-
-  return items
-      .where(
-        (item) =>
-            !item.examDate.isBefore(today) && !item.examDate.isAfter(weekEnd),
-      )
-      .toList();
+  factory UpcomingExamItem.fromMap(Map<dynamic, dynamic> map, String id) {
+    return UpcomingExamItem(
+      id: id,
+      examTitle: map['examTitle']?.toString() ?? '',
+      courseName: map['courseName']?.toString() ?? '',
+      syllabus: map['syllabus']?.toString() ?? '',
+      examDate: map['examDate'] != null
+          ? DateTime.parse(map['examDate'].toString())
+          : DateTime.now(),
+    );
+  }
 }

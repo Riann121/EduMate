@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:edumate/courses/utility/assignment_item.dart';
-import 'package:edumate/courses/utility/lecture_item.dart';
+import 'package:edumate/services/local_storage_service.dart';
 import 'package:edumate/courses/utility/assignment_tile.dart';
 import 'package:edumate/courses/utility/lecture_tile.dart';
 import 'package:edumate/courses/utility/assignment_details_page.dart';
@@ -31,6 +29,7 @@ class CourseDetailPage extends StatefulWidget {
 class _CourseDetailPageState extends State<CourseDetailPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final LocalStorageService _storage = LocalStorageService();
 
   @override
   void initState() {
@@ -48,8 +47,6 @@ class _CourseDetailPageState extends State<CourseDetailPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-
-      // AppBar
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: const BackButton(color: Colors.white),
@@ -73,29 +70,60 @@ class _CourseDetailPageState extends State<CourseDetailPage>
               ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete_outline, color: Colors.white),
+            tooltip: 'Delete Course',
+            onPressed: _confirmDeleteCourse,
+          ),
+        ],
       ),
-
       body: Column(
         children: [
-          //Overview
+          // Overview
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Overview",
-                    textAlign: TextAlign.left,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Overview",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    TextButton.icon(
+                      onPressed: _confirmDeleteCourse,
+                      icon: const Icon(Icons.delete_outline, color: Colors.red, size: 20),
+                      label: const Text(
+                        "Delete Course",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                if (widget.instructorName.isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    "Instructor: ${widget.instructorName}",
                     style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                      letterSpacing: 0.5,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey[700],
                     ),
                   ),
-                ),
+                ],
                 const SizedBox(height: 6),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -112,8 +140,6 @@ class _CourseDetailPageState extends State<CourseDetailPage>
               ],
             ),
           ),
-          const Divider(height: 1),
-
           const Divider(height: 1),
 
           // Tabs
@@ -140,8 +166,6 @@ class _CourseDetailPageState extends State<CourseDetailPage>
           ),
         ],
       ),
-
-      // Floating Button
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         onPressed: () {
@@ -154,41 +178,18 @@ class _CourseDetailPageState extends State<CourseDetailPage>
 
   // ================= ASSIGNMENTS =================
   Widget _buildAssignmentsTab() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('courses')
-          .doc(widget.courseId)
-          .collection('assignments')
-          .orderBy('date', descending: false)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
+    return ValueListenableBuilder(
+      valueListenable: _storage.assignmentsListenable,
+      builder: (context, box, child) {
+        final assignments = _storage.getAssignmentsForCourse(widget.courseId);
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(color: Colors.black),
-          );
-        }
-
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+        if (assignments.isEmpty) {
           return _emptyState(
             icon: Icons.assignment_outlined,
             title: "No assignments yet",
             subtitle: "Tap + to add an assignment",
           );
         }
-
-        final assignments = snapshot.data!.docs.map((doc) {
-          final data = doc.data() as Map<String, dynamic>;
-          return AssignmentItem(
-            id: doc.id,
-            title: data['title'] ?? '',
-            dueDate: (data['date'] as Timestamp).toDate(),
-            details: data['details'] ?? '',
-          );
-        }).toList();
 
         return ListView.builder(
           padding: const EdgeInsets.all(16),
@@ -201,7 +202,7 @@ class _CourseDetailPageState extends State<CourseDetailPage>
                 showAssignmentDetails(
                   context: context,
                   assignment: assignment,
-                  onUpdate: () {},
+                  onUpdate: () => setState(() {}),
                   onDelete: () => _deleteAssignment(assignment.id),
                 );
               },
@@ -214,40 +215,18 @@ class _CourseDetailPageState extends State<CourseDetailPage>
 
   // ================= LECTURES =================
   Widget _buildLecturesTab() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('courses')
-          .doc(widget.courseId)
-          .collection('lectures')
-          .orderBy('date', descending: false)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
+    return ValueListenableBuilder(
+      valueListenable: _storage.lecturesListenable,
+      builder: (context, box, child) {
+        final lectures = _storage.getLecturesForCourse(widget.courseId);
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(color: Colors.black),
-          );
-        }
-
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+        if (lectures.isEmpty) {
           return _emptyState(
             icon: Icons.library_books_outlined,
             title: "No lectures yet",
             subtitle: "Tap + to add a lecture",
           );
         }
-
-        final lectures = snapshot.data!.docs.map((doc) {
-          final data = doc.data() as Map<String, dynamic>;
-          return LectureItem(
-            id: doc.id,
-            title: data['title'] ?? '',
-            date: (data['date'] as Timestamp).toDate(),
-          );
-        }).toList();
 
         return ListView.builder(
           padding: const EdgeInsets.all(16),
@@ -270,7 +249,6 @@ class _CourseDetailPageState extends State<CourseDetailPage>
     );
   }
 
-  // ================= EMPTY STATE =================
   Widget _emptyState({
     required IconData icon,
     required String title,
@@ -293,22 +271,60 @@ class _CourseDetailPageState extends State<CourseDetailPage>
     );
   }
 
-  // ================= DELETE FUNCTIONS =================
   Future<void> _deleteAssignment(String id) async {
-    await FirebaseFirestore.instance
-        .collection('courses')
-        .doc(widget.courseId)
-        .collection('assignments')
-        .doc(id)
-        .delete();
+    await _storage.deleteAssignment(id);
   }
 
   Future<void> _deleteLecture(String id) async {
-    await FirebaseFirestore.instance
-        .collection('courses')
-        .doc(widget.courseId)
-        .collection('lectures')
-        .doc(id)
-        .delete();
+    await _storage.deleteLecture(id);
+  }
+
+  Future<void> _confirmDeleteCourse() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Row(
+            children: [
+              Icon(Icons.warning_amber_rounded, color: Colors.red),
+              SizedBox(width: 8),
+              Text('Delete Course'),
+            ],
+          ),
+          content: Text(
+            'Are you sure you want to delete "${widget.courseName}"? All associated assignments and lectures will also be permanently deleted.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true && mounted) {
+      await _storage.deleteCourse(widget.courseId);
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Course "${widget.courseName}" deleted'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    }
   }
 }

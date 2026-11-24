@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:edumate/courses/utility/course_item.dart';
 import 'package:edumate/courses/course_details_page_template.dart';
-import 'package:edumate/courses/firebase/firebase_service.dart';
+import 'package:edumate/services/local_storage_service.dart';
 
 Future<void> showAddCustomCourseDialog({
   required BuildContext context,
@@ -44,19 +44,23 @@ Future<void> showAddCustomCourseDialog({
                     ),
                   ),
                   const SizedBox(height: 12),
-                  RadioGroup<bool>(
-                    groupValue: isTheory,
-                    onChanged: (value) => setState(() => isTheory = value!),
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: const [
-                        Text('Course Type: '),
-                        Radio<bool>(value: true),
-                        Text('Theory'),
-                        Radio<bool>(value: false),
-                        Text('Lab'),
-                      ],
-                    ),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      const Text('Course Type: '),
+                      Radio<bool>(
+                        value: true,
+                        groupValue: isTheory,
+                        onChanged: (value) => setState(() => isTheory = value!),
+                      ),
+                      const Text('Theory'),
+                      Radio<bool>(
+                        value: false,
+                        groupValue: isTheory,
+                        onChanged: (value) => setState(() => isTheory = value!),
+                      ),
+                      const Text('Lab'),
+                    ],
                   ),
                 ],
               ),
@@ -72,7 +76,6 @@ Future<void> showAddCustomCourseDialog({
                   final instructor = instructorController.text.trim();
                   final overview = overviewController.text.trim();
 
-                  // Validate before async call
                   if (name.isEmpty || instructor.isEmpty || overview.isEmpty) {
                     if (dialogContext.mounted) {
                       ScaffoldMessenger.of(dialogContext).showSnackBar(
@@ -85,18 +88,15 @@ Future<void> showAddCustomCourseDialog({
                   }
 
                   try {
-                    // Perform async operation and get the courseId
-                    final courseId = await FirebaseService.addCourse(
+                    final courseId = await LocalStorageService().addCourse(
                       name: name,
                       instructor: instructor,
                       overview: overview,
                       isTheory: isTheory,
                     );
 
-                    // Check if context is still valid after async
                     if (!dialogContext.mounted) return;
 
-                    // Create the page with the courseId
                     final page = CourseDetailPage(
                       courseId: courseId,
                       courseName: name,
@@ -108,7 +108,6 @@ Future<void> showAddCustomCourseDialog({
                     onAdd(CourseItem(name, instructor, page), isTheory);
                     Navigator.pop(dialogContext);
 
-                    // Show success message
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -136,9 +135,4 @@ Future<void> showAddCustomCourseDialog({
       );
     },
   );
-
-  // dispose controllers
-  // courseNameController.dispose();
-  // instructorController.dispose();
-  // overviewController.dispose();
 }

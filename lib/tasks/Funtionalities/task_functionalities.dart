@@ -1,36 +1,22 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edumate/services/local_storage_service.dart';
 import '../widgets/task_item.dart';
 
 class TaskFunctionalities {
-  Future<void> addTask(TaskItem newTask, String? userId) async {
-    await FirebaseFirestore.instance.collection('tasks').add({
-      'userId': userId,
-      'title': newTask.title,
-      'detail': newTask.detail,
-      'dueDate': newTask.dueDate,
-      'isCompleted': false,
-    });
+  final LocalStorageService _storage = LocalStorageService();
+
+  Future<void> addTask(TaskItem newTask, [String? userId]) async {
+    await _storage.addTask(newTask);
   }
 
   Future<void> updateTask(TaskItem task, TaskItem updatedTask) async {
-    await FirebaseFirestore.instance.collection('tasks').doc(task.id).update({
-      'title': updatedTask.title,
-      'detail': updatedTask.detail,
-      'dueDate': updatedTask.dueDate,
-    });
+    await _storage.updateTask(task.id, updatedTask);
   }
 
-  Future<void> deleteTask(TaskItem task) {
-    return FirebaseFirestore.instance
-        .collection('tasks')
-        .doc(task.id)
-        .delete();
+  Future<void> deleteTask(TaskItem task) async {
+    await _storage.deleteTask(task.id);
   }
 
   void onTaskChecked(TaskItem task, bool? value) {
-    FirebaseFirestore.instance
-        .collection('tasks')
-        .doc(task.id)
-        .update({'isCompleted': value});
+    _storage.setTaskCompleted(task.id, value);
   }
 }
